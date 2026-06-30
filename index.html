@@ -685,6 +685,11 @@ const XP_PER=150;
 const CW_CHATS={
   coffee:{
     name:'Jordan',greeting:['omg good morning ☕','didnt exist until my 3rd coffee','coffee o clock already??'],
+    greetingReplies:[
+      {q:'Same tbh ☕',a:"Right?? Today barely started and I already need a refill. How is your morning going?"},
+      {q:'How many coffees is that for you?',a:"Second. I'm aiming for three before 10am. It's a goal. A lifestyle, really."},
+      {q:'Good morning! ☀️',a:"Allegedly. I'll confirm once I finish this cup. What's going on with you today?"},
+    ],
     topics:[
       {q:"How's your morning?",a:"Honestly? Didn't exist until my third coffee. Still not sure I'm fully here. You?"},
       {q:"Any coffee recommendations?",a:"Ethiopian single origin, light roast, pour-over. Life-changing. Don't settle for the breakroom stuff 😤"},
@@ -695,6 +700,11 @@ const CW_CHATS={
   },
   meet:{
     name:'Blake',greeting:['Hey! Got a sec to sync? 📅','Quick touch-base?','I blocked time for us later!'],
+    greetingReplies:[
+      {q:'Yes, what\'s up?',a:"Great! I wanted to loop you in on a few things before the all-hands. Do you have 15 minutes now or after lunch?"},
+      {q:'Sure, quick one though!',a:"Totally! I'll keep it tight. Just need to align on two things — shouldn't take more than 10 minutes."},
+      {q:'Can we do async instead?',a:"Completely understand! I'll put it in a doc and tag you. Sometimes async is honestly better anyway 📝"},
+    ],
     topics:[
       {q:"What's on your calendar today?",a:"Back-to-backs until 4pm but I found a 15-minute gap we could use for alignment. Does that work?"},
       {q:"Can we reschedule something?",a:"Of course! Let me pull up the shared cal. Does Tuesday at 2 work, or should we find a recurring slot?"},
@@ -705,6 +715,11 @@ const CW_CHATS={
   },
   expert:{
     name:'Sam',greeting:['...','Hey.','Working on something interesting?'],
+    greetingReplies:[
+      {q:'Hey! Yeah actually.',a:"Good. What is it? I've been heads-down but I can spare a few minutes if it's worth the context switch."},
+      {q:'Hey Sam! Not really, you?',a:"Possibly. Hard to say until I'm done. I don't talk about things until they work."},
+      {q:'Just surviving the calendar 😅',a:"That's most people's job description honestly. What's eating your time right now?"},
+    ],
     topics:[
       {q:"Need advice on a project.",a:"What's the actual problem you're solving? Not the symptom — the root cause. Walk me through it."},
       {q:"How do you stay so focused?",a:"Deep work blocks. No Slack. No meetings before noon. Took 6 months to get people to respect it, but worth it."},
@@ -715,6 +730,11 @@ const CW_CHATS={
   },
   new:{
     name:'Riley',greeting:['Hi!! 👋','Do you know where the bathroom is? Third time asking lol','How long does lunch usually take here?'],
+    greetingReplies:[
+      {q:'Hi Riley! How\'s it going?',a:"Good I think?? Still figuring out where everything is. Also is there a Slack etiquette I should know about? I feel like I'm missing something 😅"},
+      {q:'The bathroom is down the hall, left at the kitchen!',a:"THANK YOU. I kept ending up at the supply closet. This is genuinely life-changing information 🙏"},
+      {q:'Lunch is usually around an hour!',a:"Oh perfect, that's enough time to actually leave the building! Does anyone want to grab food? Is that a thing people do here?"},
+    ],
     topics:[
       {q:"How's your first week going?",a:"SO much to learn!! Everyone uses acronyms I don't know yet. What's a PRD? What's a synergy? Is synergy real??"},
       {q:"Need help with anything?",a:"YES. How do I get access to the shared drive? I've asked IT twice but the ticket just... exists. In the void."},
@@ -825,7 +845,7 @@ function switchCwChat(key){
   const msgs=S.messages[key]||[];
   if(msgs.length===0){
     const greet=data.greeting[Math.floor(Math.random()*data.greeting.length)];
-    S.messages[key]=[{from:'them',text:greet}];save();
+    S.messages[key]=[{from:'them',text:greet,isGreeting:true}];save();
   }
   S.messages[key].forEach(m=>appendBubble(thread,m.from,m.text));
   thread.scrollTop=thread.scrollHeight;
@@ -844,11 +864,24 @@ function appendBubble(thread,from,text,typing=false){
 function renderMsgOptions(key){
   const data=CW_CHATS[key];
   const opts=document.getElementById('msg-options');opts.innerHTML='';
-  // Show up to 4 random topics, shuffled each open
-  const pool=[...data.topics].sort(()=>Math.random()-0.5).slice(0,4);
+  const msgs=S.messages[key]||[];
+
+  // If only the greeting exists, show greeting replies first
+  const onlyGreeting=msgs.length===1&&msgs[0].isGreeting;
+  const pool=onlyGreeting
+    ?[...data.greetingReplies]
+    :[...data.topics].sort(()=>Math.random()-0.5).slice(0,4);
+
+  if(onlyGreeting){
+    const hint=document.createElement('div');
+    hint.style.cssText='font-size:9px;color:var(--text3);font-weight:600;margin-bottom:4px;';
+    hint.textContent='Reply:';
+    opts.appendChild(hint);
+  }
+
   pool.forEach(topic=>{
     const b=document.createElement('button');b.className='msg-opt-btn';
-    b.textContent='→ '+topic.q;
+    b.textContent=(onlyGreeting?'':'→ ')+topic.q;
     b.onclick=()=>sendMsg(key,topic);
     opts.appendChild(b);
   });
