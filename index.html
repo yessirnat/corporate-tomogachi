@@ -139,6 +139,8 @@ body {
 .speed-btn.active { background: var(--peach); border-color: var(--peach-d); color: white; box-shadow: 0 2px 0 var(--peach-d); }
 .spd-auto.active { background: var(--yellow); border-color: var(--yellow-d); color: #5A3A08; box-shadow: 0 2px 0 var(--yellow-d); }
 .tb-clock { font-size: 11px; font-weight: 700; color: var(--lavender); background: #F5F0FF; border: 1.5px solid var(--lavender); border-radius: 8px; padding: 3px 9px; }
+.tb-music { font-size: 13px; background: var(--cream); border: 1.5px solid var(--border); border-radius: 8px; padding: 3px 9px; cursor: pointer; box-shadow: 0 2px 0 var(--shadow); transition: background 0.15s; }
+.tb-music:hover { background: var(--beige); }
 /* Messages */
 .msg-cw-btn { display:flex; align-items:center; gap:7px; padding:7px 8px; border-radius:10px; cursor:pointer; border:2px solid transparent; background:transparent; width:100%; text-align:left; font-family:'Quicksand',sans-serif; }
 .msg-cw-btn:hover { background:var(--cream); }
@@ -257,6 +259,7 @@ body {
     <div class="tb-logo">Office<em>Life</em></div>
     <div class="tb-day" id="tb-day">Day 1 · Monday</div>
     <div class="tb-clock" id="tb-clock">9:00 AM</div>
+    <button class="tb-music" id="music-btn" onclick="toggleMusic()" title="Toggle lofi music">🎵</button>
     <div class="tb-right">
       <div class="tb-money" id="tb-money">$0</div>
       <div class="tb-level" id="tb-level">Intern</div>
@@ -644,7 +647,18 @@ const EVENTS=[
   {id:'makeit',type:'Feedback',icon:'👀',title:'"Can you just make it pop more?"',desc:'Stakeholder feedback on your 3-week project. No further context provided.',careers:['design'],choices:[{text:'Ask clarifying questions. Get specifics.',o:{e:-10,s:10,m:5,x:10,story:'Turned "make it pop" into 12 specific feedback items.'}},{text:'"Great feedback!" (Make no changes.)',o:{m:10,s:-5,x:4,story:'"Great feedback." Made no changes. Nobody noticed.'}},{text:'Total rethink. Start fresh.',o:{e:-25,m:-10,s:25,x:12,story:'Interpreted "make it pop" as permission to redesign everything.'}}]},
   {id:'broken',type:'Launch Day',icon:'📣',title:'Campaign is live. The landing page is a 404.',desc:'The link in 50,000 emails goes nowhere. The emails have been sent.',careers:['mkt'],choices:[{text:'Fix the page immediately. All hands.',o:{e:-20,s:30,x:12,story:'Recovered a broken campaign launch in under 20 minutes.'}},{text:'Send a cheerful follow-up with the right link.',o:{e:-10,s:15,m:5,x:8,story:'Sent an "Oops! Here\'s the right link" email. Open rates were great.'}},{text:'Launch anyway. Some people will find it.',o:{s:10,m:-10,x:3,story:'Launched a broken campaign and hoped for the best.'}}]},
   {id:'deal',type:'Negotiation',icon:'🤝',title:'Big deal on the line. Client wants 40% off.',desc:'"We\'re talking to three other vendors." Quota ends Friday.',careers:['sales'],choices:[{text:'Approve the discount. Close the deal.',o:{m:10,s:5,x:8,sal:200,story:'Closed the deal at 40% discount. Quota achieved. Questions later.'}},{text:'Counter at 20%. Hold the line.',o:{e:-10,m:5,s:15,x:12,sal:100,story:'Negotiated 20% off. Won the deal and self-respect.'}},{text:'Walk away. This isn\'t the right fit.',o:{m:15,s:5,x:10,story:'Walked away from a bad deal. Your manager will have questions.'}}]},
-  {id:'complaint',type:'People Matter',icon:'📩',title:'An employee concern just landed in your inbox.',desc:'Marked important. Two people involved. Both in back-to-back meetings.',careers:['hr'],choices:[{text:'Investigate today. Schedule calls now.',o:{e:-20,s:20,m:10,x:12,story:'Investigated and addressed the concern within 24 hours.'}},{text:'Acknowledge receipt and set a clear timeline.',o:{e:-5,s:10,x:7,story:'Responded promptly and set clear expectations.'}},{text:'Loop in legal before acting.',o:{e:-10,s:5,x:10,story:'Consulted legal first. The right call.'}}]}
+  {id:'complaint',type:'People Matter',icon:'📩',title:'An employee concern just landed in your inbox.',desc:'Marked important. Two people involved. Both in back-to-back meetings.',careers:['hr'],choices:[{text:'Investigate today. Schedule calls now.',o:{e:-20,s:20,m:10,x:12,story:'Investigated and addressed the concern within 24 hours.'}},{text:'Acknowledge receipt and set a clear timeline.',o:{e:-5,s:10,x:7,story:'Responded promptly and set clear expectations.'}},{text:'Loop in legal before acting.',o:{e:-10,s:5,x:10,story:'Consulted legal first. The right call.'}}]},
+  {id:'pip',type:'Tough Conversation',icon:'📉',title:'A coworker is on a PIP.',desc:"You just found out. They sit next to you. They don't know you know.",choices:[{text:'Act normal. Give them space and support.',o:{m:10,s:10,x:8,story:'Chose empathy and gave your coworker space to navigate things quietly.'}},{text:'Offer to help with their workload.',o:{e:-10,m:15,s:5,x:12,story:'Quietly offered to help a coworker going through a PIP. It meant a lot.'}},{text:'Say nothing. Mind your business.',o:{m:-5,s:-5,x:3,story:"Knew about a coworker's PIP and pretended everything was fine."}}]},
+  {id:'vpreport',type:'Executive Ask',icon:'🏢',title:'A VP just pinged you directly.',desc:'"Hey — can you pull together a quick report by EOD? Nothing major." It is major.',choices:[{text:'Drop everything. Deliver something great.',o:{e:-25,s:25,m:5,x:15,story:'Delivered a VP-requested report in 3 hours. It was anything but "quick."'}},{text:'Scope it down. Send what you can.',o:{e:-10,s:15,x:10,story:'Sent a scoped-down report to the VP. Clear, concise, on time.'}},{text:'Ask your manager to run point with them.',o:{e:-5,s:5,m:5,x:7,story:'Looped in your manager on the VP ask before acting. Smart move.'}}]},
+  {id:'scopecreep',type:'Surprise Task',icon:'📥',title:'"We\'re adding one more thing to your plate."',desc:'It is not one thing. It is a project. It has dependencies.',choices:[{text:'Accept it. You can figure this out.',o:{e:-15,s:15,m:-5,x:10,story:'Said yes to a major scope addition and immediately started triaging.'}},{text:'Negotiate the timeline out.',o:{e:-5,s:5,m:5,x:10,story:'Pushed back on the timeline. Won an extra two weeks.'}},{text:'Ask what drops to make room for it.',o:{e:-5,s:10,m:5,x:12,story:'Asked the right question: what gets deprioritized? Turned a crisis into a plan.'}}]},
+  {id:'skiplevel',type:'Leadership',icon:'🤝',title:'Your director wants a skip-level with you.',desc:'"Just a check-in." Your manager doesn\'t know yet. You have one hour to prepare.',choices:[{text:'Be honest. Share what\'s working and what\'s not.',o:{m:15,s:10,x:12,story:'Had a candid skip-level. Your director left impressed.'}},{text:'Stick to safe topics and positive updates.',o:{s:-5,m:5,x:6,story:'Played it safe in the skip-level. Nothing bad happened. Nothing memorable either.'}},{text:'Use it to advocate for your team.',o:{m:20,s:10,x:15,story:'Spent the skip-level advocating for your team. Your director noticed.'}}]},
+  {id:'printer',type:'Office Crisis',icon:'🖨️',title:'The printer is broken. You have a 10am print job.',desc:'It says "PC Load Letter." Nobody knows what that means. The meeting starts soon.',choices:[{text:'Google the error code immediately.',o:{e:-5,s:10,x:5,story:'Diagnosed the PC Load Letter error in under 8 minutes.'}},{text:'Use the printer on the 4th floor.',o:{e:-10,m:5,x:4,story:'Trekked to the 4th floor printer. The walk was actually nice.'}},{text:'Go paperless. Present from your laptop.',o:{m:5,s:-5,x:8,story:'Pivoted from print to digital at the last minute. Honestly better.'}}]},
+  {id:'drama',type:'Team Dynamics',icon:'😬',title:'Two teammates are not speaking.',desc:'The Slack messages are cold. The meeting silences are loud. You\'re in the middle.',choices:[{text:'Check in with both separately, privately.',o:{e:-10,m:10,s:10,x:10,story:'Quietly checked in with both teammates. It helped more than expected.'}},{text:'Bring it up in the next team retro.',o:{s:10,m:-5,x:7,story:'Flagged the team tension in the retro. Awkward but necessary.'}},{text:'Stay out of it completely.',o:{s:-5,m:-5,x:3,story:'Stayed out of the team drama. The tension remained.'}}]},
+  {id:'budget',type:'Finance Update',icon:'✂️',title:'"All discretionary budget is frozen until Q4."',desc:'Your team offsite, the tool you needed, and the conference you applied for: all gone.',choices:[{text:'Reprioritize and find creative alternatives.',o:{e:-5,m:5,x:10,story:'Turned a budget freeze into an opportunity to get scrappy and creative.'}},{text:'Push back. Make the case for exceptions.',o:{e:-10,s:10,x:8,story:'Submitted a business case for budget exceptions. Got one approved.'}},{text:'Quietly cancel everything and move on.',o:{m:-10,s:5,x:4,story:'Silently absorbed the budget freeze. The offsite is gone. You\'re fine.'}}]},
+  {id:'recognition',type:'Spotlight',icon:'🌟',title:'Your manager shouted you out in the all-hands.',desc:"In front of the whole company. You didn't know it was coming. Everyone is reacting in Slack.",choices:[{text:'Thank them genuinely. Soak it in.',o:{m:25,e:10,x:8,story:'Received public recognition with grace. Your Slack DMs were full for an hour.'}},{text:'Redirect the praise to your team.',o:{m:20,s:-5,x:12,story:'Shared the spotlight with your whole team. People noticed.'}},{text:'Feel awkward about it. Reply with one emoji.',o:{m:10,s:5,x:5,story:'Responded to a company shoutout with a single "🙏". Very you.'}}]},
+  {id:'hybrid',type:'Policy Update',icon:'🏠',title:'New hybrid policy drops at 9am.',desc:'"3 days in-office, mandatory. Effective next month." The Slack channel is moving fast.',choices:[{text:'Read the full policy before reacting.',o:{e:-5,s:5,x:7,story:'Read the entire hybrid policy document before forming an opinion. Rare.'}},{text:'Schedule a team discussion to process it.',o:{m:10,s:5,x:10,story:'Organized a team discussion about the hybrid policy. People felt heard.'}},{text:'Immediately calculate your commute cost.',o:{m:-5,s:10,x:3,story:'Opened Google Maps before the policy email finished loading.'}}]},
+  {id:'slowday',type:'Rare Occasion',icon:'☀️',title:'It is somehow a slow day.',desc:'Your calendar is light. Slack is quiet. Nobody needs anything. This is suspicious.',choices:[{text:'Get ahead on your backlog. Be proactive.',o:{e:-10,m:10,x:12,story:'Used a rare slow day to get ahead on work. Future you says thank you.'}},{text:'Take a long lunch. You\'ve earned it.',o:{h:30,m:20,e:10,s:-15,x:4,story:'Took a full hour for lunch on a slow day. Completely justified.'}},{text:'Worry that something is very wrong.',o:{s:15,m:-10,x:2,story:"Couldn't enjoy the slow day. Kept refreshing email just in case."}}]},
+  {id:'mistake',type:'Learning Moment',icon:'😬',title:'You sent an email to the wrong person.',desc:'Not terrible. But not great. The reply is pending. Your heart rate is elevated.',choices:[{text:'Send a quick, calm correction email.',o:{s:10,m:5,x:8,story:'Caught an email mistake and corrected it within 3 minutes. Handled.'}},{text:'Recall the message and hope for the best.',o:{s:15,m:-5,x:4,story:'Attempted to recall an email. The recipient already opened it.'}},{text:'Own it with a little humor.',o:{m:10,s:-5,x:10,story:'Responded to an email mistake with a self-aware follow-up. People loved it.'}}]}
 ];
 
 const SHOP=[{id:'plant',name:'Fiddle Leaf Fig',emoji:'🌿',desc:'A lush upgrade for your office plant.',price:150,bonus:'+5 Morale each day'},{id:'keyboard',name:'Mechanical Keyboard',emoji:'⌨️',desc:'Clicky. Satisfying. Coworkers have opinions.',price:200,bonus:'+5 Energy each day'},{id:'desk',name:'Standing Desk',emoji:'🪑',desc:'You\'ll use it twice. It looks great.',price:350,bonus:'-5 Stress each day'},{id:'award',name:'Employee of the Month',emoji:'🏆',desc:'Framed. Mounted. Earned.',price:100,bonus:'+3 XP each day'},{id:'espresso',name:'Espresso Machine',emoji:'☕',desc:'No more breakroom coffee. You\'ve arrived.',price:280,bonus:'Coffee action is always free'},{id:'wb',name:'Whiteboard',emoji:'📋',desc:'For big thoughts and ambitious diagrams.',price:120,bonus:'+4 XP from meetings'}];
@@ -765,6 +779,104 @@ function sendMsg(key,topic){
   },400);
 }
 function clamp(v,lo=0,hi=100){return Math.max(lo,Math.min(hi,v));}
+
+// ── Lofi music engine (Web Audio API) ─────────────────────────────
+let _audioCtx=null,_masterGain=null,_musicOn=true,_chordIdx=0,_chordTimer=null;
+const LOFI_CHORDS=[
+  [65.41,98.00,116.54,146.83],   // Cm (bass octave)
+  [87.31,104.0,130.81,155.56],   // Fm
+  [103.83,130.81,155.56,196.00], // Ab
+  [77.78,98.00,116.54,155.56],   // Eb
+];
+function initAudio(){
+  if(_audioCtx)return;
+  try{
+    _audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    const lpf=_audioCtx.createBiquadFilter();lpf.type='lowpass';lpf.frequency.value=1600;lpf.Q.value=0.7;
+    const rev=_audioCtx.createDelay(0.5);rev.delayTime.value=0.22;
+    const revGain=_audioCtx.createGain();revGain.gain.value=0.18;
+    _masterGain=_audioCtx.createGain();_masterGain.gain.value=_musicOn?0.22:0;
+    lpf.connect(_masterGain);lpf.connect(rev);rev.connect(revGain);revGain.connect(_masterGain);
+    _masterGain.connect(_audioCtx.destination);
+    playLofiChord(lpf);
+    playLofiRhythm();
+  }catch(e){}
+}
+function playLofiChord(dest){
+  if(!_audioCtx)return;
+  const now=_audioCtx.currentTime;
+  const freqs=LOFI_CHORDS[_chordIdx%LOFI_CHORDS.length];
+  const gains=[0.16,0.12,0.10,0.08];
+  freqs.forEach((f,i)=>{
+    const osc=_audioCtx.createOscillator();
+    osc.type=i===0?'sine':'triangle';
+    osc.frequency.value=f*(i===0?1:2)+(Math.random()*1.5-0.75);
+    const g=_audioCtx.createGain();
+    g.gain.setValueAtTime(0,now);
+    g.gain.linearRampToValueAtTime(gains[i],now+1.8);
+    g.gain.setValueAtTime(gains[i],now+3.5);
+    g.gain.linearRampToValueAtTime(0,now+5.2);
+    osc.connect(g);g.connect(dest);osc.start(now);osc.stop(now+5.5);
+  });
+  _chordIdx++;
+  _chordTimer=setTimeout(()=>playLofiChord(dest),4200);
+}
+function playLofiRhythm(){
+  if(!_audioCtx)return;
+  const bpm=82,beat=60/bpm*1000;
+  const pattern=[1,0,0,1,1,0,0,0]; // hi-hat pattern
+  let step=0;
+  setInterval(()=>{
+    if(!_audioCtx||_masterGain?.gain.value<0.01){step=(step+1)%8;return;}
+    if(pattern[step]){
+      const buf=_audioCtx.createBuffer(1,_audioCtx.sampleRate*0.04,_audioCtx.sampleRate);
+      const data=buf.getChannelData(0);
+      for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*Math.pow(1-i/data.length,2)*0.4;
+      const src=_audioCtx.createBufferSource();src.buffer=buf;
+      const hpf=_audioCtx.createBiquadFilter();hpf.type='highpass';hpf.frequency.value=6000;
+      const g=_audioCtx.createGain();g.gain.value=0.12;
+      src.connect(hpf);hpf.connect(g);g.connect(_masterGain);src.start();
+    }
+    // kick on beats 1 & 3
+    if(step===0||step===4){
+      const osc=_audioCtx.createOscillator();const g=_audioCtx.createGain();
+      const now=_audioCtx.currentTime;
+      osc.frequency.setValueAtTime(110,now);osc.frequency.exponentialRampToValueAtTime(0.01,now+0.35);
+      g.gain.setValueAtTime(0.28,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.35);
+      osc.connect(g);g.connect(_masterGain);osc.start(now);osc.stop(now+0.4);
+    }
+    step=(step+1)%8;
+  },beat/2);
+}
+function toggleMusic(){
+  if(!_audioCtx)initAudio();
+  _musicOn=!_musicOn;
+  if(_masterGain){
+    const now=_audioCtx.currentTime;
+    _masterGain.gain.cancelScheduledValues(now);
+    _masterGain.gain.linearRampToValueAtTime(_musicOn?0.22:0,now+0.4);
+  }
+  const btn=document.getElementById('music-btn');
+  if(btn)btn.textContent=_musicOn?'🎵':'🔇';
+}
+
+// ── Cat animation (blink / yawn) ───────────────────────────────────
+const catAnim={blink:false,yawn:false};
+let _blinkT=null,_yawnT=null;
+function scheduleBlink(){
+  _blinkT=setTimeout(()=>{
+    catAnim.blink=true;drawOfficeScene();
+    setTimeout(()=>{catAnim.blink=false;drawOfficeScene();scheduleBlink();},130+Math.random()*80);
+  },2500+Math.random()*3500);
+}
+function scheduleYawn(){
+  _yawnT=setTimeout(()=>{
+    catAnim.yawn=true;drawOfficeScene();
+    setTimeout(()=>{catAnim.yawn=false;drawOfficeScene();scheduleYawn();},1100+Math.random()*400);
+  },18000+Math.random()*22000);
+}
+function startCatAnim(){scheduleBlink();scheduleYawn();}
+
 function fmtHour(h){const hh=Math.floor(h);const m=h%1>=0.5?'30':'00';const ampm=hh>=12?'PM':'AM';return `${hh>12?hh-12:hh||12}:${m} ${ampm}`;}
 function updateClock(){const el=document.getElementById('tb-clock');if(el)el.textContent=fmtHour(S.gameHour);}
 function clearAutoTimer(){if(_autoTimer)clearTimeout(_autoTimer);if(_autoBarTimer)clearInterval(_autoBarTimer);_autoTimer=null;_autoBarTimer=null;}
@@ -1189,8 +1301,8 @@ function drawOfficeScene(){
   leaf(plx-11,ply-potH*1.2,-0.65,potH*0.72);
 
   // ── CAT (drawn before desk so desk covers lower body) ──
-  const deskTopY=H*0.56;
-  const hR=H*0.098,hCx=cx-W*0.01,hCy=deskTopY-hR*0.5;
+  const deskTopY=H*0.595;
+  const hR=H*0.118,hCx=cx-W*0.01,hCy=deskTopY-hR*0.72;
 
   // Torso (visible above desk)
   ctx.fillStyle=cat.body;ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.86,hR*0.68,hR*0.6,0,0,Math.PI*2);ctx.fill();
@@ -1229,19 +1341,37 @@ function drawOfficeScene(){
   // Belly on head (chin)
   ctx.fillStyle=cat.belly;ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.26,hR*0.4,hR*0.28,0,0,Math.PI*2);ctx.fill();
 
-  // Eyes
+  // Eyes — blink or open
   const eyY=hCy-hR*0.1,eyS=hR*0.36;
-  ctx.fillStyle='#1A1008';ctx.beginPath();ctx.ellipse(hCx-eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.ellipse(hCx+eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
-  ctx.fillStyle='white';ctx.beginPath();ctx.arc(hCx-eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
-  ctx.beginPath();ctx.arc(hCx+eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
+  if(catAnim.blink){
+    ctx.strokeStyle='#1A1008';ctx.lineWidth=2.2;
+    ctx.beginPath();ctx.arc(hCx-eyS,eyY+hR*0.04,hR*0.13,Math.PI,0,true);ctx.stroke();
+    ctx.beginPath();ctx.arc(hCx+eyS,eyY+hR*0.04,hR*0.13,Math.PI,0,true);ctx.stroke();
+  } else {
+    ctx.fillStyle='#1A1008';ctx.beginPath();ctx.ellipse(hCx-eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.ellipse(hCx+eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='white';ctx.beginPath();ctx.arc(hCx-eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
+    ctx.beginPath();ctx.arc(hCx+eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
+  }
 
   // Nose
   ctx.fillStyle=cat.nose;ctx.beginPath();ctx.arc(hCx,hCy+hR*0.15,hR*0.077,0,Math.PI*2);ctx.fill();
-  // Mouth
-  ctx.strokeStyle=cat.nose;ctx.lineWidth=1.4;
-  ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx-hR*0.15,hCy+hR*0.34,hCx-hR*0.2,hCy+hR*0.29);ctx.stroke();
-  ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx+hR*0.15,hCy+hR*0.34,hCx+hR*0.2,hCy+hR*0.29);ctx.stroke();
+  // Mouth — yawn or normal
+  if(catAnim.yawn){
+    ctx.fillStyle='#7A1830';ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.31,hR*0.19,hR*0.16,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#F5C0C8';ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.33,hR*0.1,hR*0.07,0,0,Math.PI*2);ctx.fill();
+    // squinted yawn eyes override
+    if(!catAnim.blink){
+      ctx.fillStyle=cat.body;ctx.beginPath();ctx.arc(hCx-eyS,eyY,hR*0.17,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#1A1008';ctx.lineWidth=2;
+      ctx.beginPath();ctx.arc(hCx-eyS,eyY+hR*0.06,hR*0.11,Math.PI,0,true);ctx.stroke();
+      ctx.beginPath();ctx.arc(hCx+eyS,eyY+hR*0.06,hR*0.11,Math.PI,0,true);ctx.stroke();
+    }
+  } else {
+    ctx.strokeStyle=cat.nose;ctx.lineWidth=1.4;
+    ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx-hR*0.15,hCy+hR*0.34,hCx-hR*0.2,hCy+hR*0.29);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx+hR*0.15,hCy+hR*0.34,hCx+hR*0.2,hCy+hR*0.29);ctx.stroke();
+  }
 
   // Blush
   ctx.fillStyle='#F0A0B8';ctx.globalAlpha=0.28;
@@ -1277,16 +1407,30 @@ function drawOfficeScene(){
     ctx.strokeStyle=OL;ctx.lineWidth=1.8;ctx.stroke();
   });
 
-  // ── MONITOR ──
-  const monCx=hCx-W*0.035,monY=deskTopY-dskPy-H*0.23,monW=W*0.115,monH=H*0.2;
-  ctx.fillStyle='#F8F4F0';ctx.beginPath();ctx.roundRect(monCx-monW/2,monY,monW,monH,5);ctx.fill();
+  // ── MONITOR (wide rectangle) ──
+  const monCx=hCx-W*0.04,monY=deskTopY-dskPy-H*0.255,monW=W*0.22,monH=H*0.18;
+  // outer bezel
+  ctx.fillStyle='#EDEAE6';ctx.beginPath();ctx.roundRect(monCx-monW/2,monY,monW,monH,7);ctx.fill();
   ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
-  ctx.fillStyle='#DCF0F8';ctx.beginPath();ctx.roundRect(monCx-monW/2+4,monY+4,monW-8,monH-14,3);ctx.fill();
-  ctx.strokeStyle='#B0D0E0';ctx.lineWidth=1.5;
-  [0,1,2,3,4].forEach(i=>{const lw2=i%3===0?monW-16:monW-22;ctx.beginPath();ctx.moveTo(monCx-monW/2+8,monY+10+i*(monH-22)/4);ctx.lineTo(monCx-monW/2+8+lw2,monY+10+i*(monH-22)/4);ctx.stroke();});
-  ctx.fillStyle='#E8E0D8';ctx.strokeStyle=OL;ctx.lineWidth=2;
-  ctx.beginPath();ctx.roundRect(monCx-6,monY+monH,12,H*0.052,2);ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.roundRect(monCx-15,monY+monH+H*0.05,30,6,3);ctx.fill();ctx.stroke();
+  // screen
+  const scrPad=6;
+  ctx.fillStyle='#C8E8F8';ctx.beginPath();ctx.roundRect(monCx-monW/2+scrPad,monY+scrPad,monW-scrPad*2,monH-scrPad*2-6,4);ctx.fill();
+  // screen content lines
+  ctx.strokeStyle='#90C4DC';ctx.lineWidth=1.5;
+  const scrW=monW-scrPad*2,scrH=monH-scrPad*2-6,scrX=monCx-monW/2+scrPad,scrY=monY+scrPad;
+  [0,1,2,3,4,5].forEach(i=>{
+    const lw2=i%2===0?scrW*0.72:scrW*0.45;
+    ctx.beginPath();ctx.moveTo(scrX+8,scrY+8+i*(scrH-16)/5);ctx.lineTo(scrX+8+lw2,scrY+8+i*(scrH-16)/5);ctx.stroke();
+  });
+  // small colored blocks (like open windows/tabs)
+  [['#F5B8C0',0],['#B8D8F0',1],['#C8E8C0',2]].forEach(([col,i])=>{
+    ctx.fillStyle=col;ctx.globalAlpha=0.7;
+    ctx.beginPath();ctx.roundRect(scrX+8+i*((scrW-24)/3+4),scrY+scrH-22,(scrW-24)/3,14,3);ctx.fill();ctx.globalAlpha=1;
+  });
+  // stand neck + base
+  ctx.fillStyle='#E0DCD8';ctx.strokeStyle=OL;ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(monCx-5,monY+monH,10,H*0.048,2);ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.roundRect(monCx-20,monY+monH+H*0.046,40,7,4);ctx.fill();ctx.stroke();
 
   // Keyboard
   ctx.fillStyle='#F0ECE8';ctx.beginPath();ctx.roundRect(monCx-W*0.055,deskTopY-dskPy-5,W*0.11,H*0.038,3);ctx.fill();
@@ -1323,9 +1467,12 @@ function drawOfficeScene(){
 }
 
 function init(){
-  // clear old saves from previous versions
   if(load()&&S.started){go('home');}
   else{initCreate();go('create');}
+  // Start cat animations after a short delay for layout
+  setTimeout(startCatAnim, 800);
+  // Start audio on first user interaction
+  document.addEventListener('click', ()=>{if(!_audioCtx&&_musicOn)initAudio();}, {once:true});
 }
 init();
 </script>
