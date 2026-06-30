@@ -230,6 +230,101 @@ body {
 .fade { animation: fadeUp .22s ease; }
 @keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
 .o-char { animation: float 3s ease-in-out infinite; }
+/* ── MOBILE RESPONSIVE ─────────────────────────────── */
+@media (max-width: 640px) {
+  body { font-size: 13px; }
+
+  /* Topbar */
+  .topbar { padding: 7px 12px; gap: 6px; flex-wrap: nowrap; }
+  .tb-logo { font-size: 14px; }
+  .tb-day { font-size: 9px; }
+  .tb-clock { font-size: 9px; padding: 2px 6px; }
+  .tb-music { font-size: 11px; padding: 2px 7px; }
+  .tb-right { gap: 6px; }
+  .tb-money { font-size: 12px; }
+  .tb-level { font-size: 8px; }
+
+  /* Home: stack vertically, canvas first */
+  #screen-home.active { flex-direction: column; height: 100dvh; max-height: 100dvh; }
+  .middle { flex-direction: column; overflow-y: auto; padding: 6px; gap: 6px; flex: 1; min-height: 0; }
+  .panel-c { width: 100%; min-width: 0; height: 260px; min-height: 260px; flex: none; order: -1; border-radius: 14px; }
+  #office-canvas { min-height: 260px; }
+  .panel-l { width: 100%; min-width: 0; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .panel-r { width: 100%; min-width: 0; flex-direction: row; flex-wrap: wrap; gap: 6px; }
+  .p-card { padding: 10px 12px; }
+  .p-card:first-child { flex: 1 1 100%; }  /* employee card full width */
+  .p-card:nth-child(2) { flex: 1 1 100%; } /* stats full width */
+  .p-card:nth-child(3) { flex: 1 1 100%; } /* promo full width */
+  .p-card:nth-child(4) { flex: 1 1 100%; } /* coworkers full width */
+  .panel-r .p-card { flex: 1 1 calc(50% - 3px); min-width: 0; }
+  .panel-r .p-card:first-child { flex: 1 1 100%; } /* calendar full width */
+  .plabel { font-size: 7px; }
+  .stat-group { gap: 5px; }
+  .srow { gap: 5px; }
+  .slabel { font-size: 9px; width: 62px; min-width: 62px; }
+  .sval { font-size: 9px; width: 18px; }
+  .cal-hdr { font-size: 18px; }
+  .cal-sub { font-size: 9px; }
+  #sched-list { font-size: 10px; }
+  .sched-row { padding: 4px 0; }
+  .sched-t { font-size: 9px; min-width: 28px; }
+  #notif-list .notif-item { font-size: 9px; }
+  .char-name { font-size: 15px; }
+  .promo-xp { font-size: 9px; }
+  .cw-row { padding: 6px 0; }
+
+  /* Action bar */
+  .actionbar { padding: 7px 8px; gap: 5px; overflow-x: auto; flex-wrap: nowrap; }
+  .abtn { padding: 6px 7px; font-size: 7px; min-width: 44px; }
+  .abtn span:first-child { font-size: 15px; }
+  .abtn-start { padding: 8px 12px; font-size: 9px; flex-shrink: 0; }
+
+  /* Workday/EOD/Shop: full screen column */
+  #screen-workday.active, #screen-eod.active, #screen-shop.active, #screen-create.active {
+    flex-direction: column; max-width: 100%; height: 100dvh; max-height: 100dvh; overflow-y: auto;
+  }
+  #screen-workday { padding: 12px 10px; gap: 10px; }
+  .wd-hdr h2 { font-size: 9px; }
+  .wd-title { font-size: 11px; }
+  .evcard { max-width: 100%; }
+  .evc-title { font-size: 14px; }
+  .evc-desc { font-size: 10px; }
+  .choice-btn { font-size: 10px; padding: 10px 12px; }
+  .outcome-box { max-width: 100%; padding: 16px; }
+  .out-title { font-size: 13px; }
+  .speed-btn { font-size: 8px; padding: 3px 7px; }
+  #auto-bar-wrap { max-width: 100%; }
+
+  /* EOD screen */
+  #screen-eod { padding: 20px 14px; }
+  .eod-hdr h2 { font-size: 20px; }
+  .eod-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .eod-stat { padding: 10px; }
+  .btn-nextday { font-size: 13px; padding: 12px 24px; }
+
+  /* Shop screen */
+  #screen-shop { padding: 14px; }
+  .shop-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .shop-item { padding: 12px 10px; }
+
+  /* Messages modal */
+  #messages-modal > div { width: 96vw !important; height: 88vh !important; max-height: 88vh !important; }
+  #msg-sidebar { width: 90px !important; }
+  .msg-cw-name { font-size: 8px; }
+  .msg-cw-role { font-size: 6px; }
+  .msg-bubble { font-size: 9px; padding: 7px 9px; }
+  .msg-opt-btn { font-size: 8px; padding: 5px 8px; }
+
+  /* Create screen */
+  #screen-create { padding: 16px 14px; }
+  .logo { font-size: 22px; }
+  .tagline { font-size: 10px; }
+  .create-card { padding: 14px; }
+  .career-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .cat-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; }
+  .cat-opt { padding: 6px 3px 5px; }
+  .btn-start { padding: 12px 24px; font-size: 13px; }
+}
 </style>
 </head>
 <body>
