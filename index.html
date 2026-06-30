@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OfficeLife</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream: #FBF9F5;
+  --beige: #F2EDE4;
+  --panel: #FFFFFF;
+  --border: #D8C8B0;
+  --shadow: #C0AE94;
+  --text: #3E4E50;
+  --text2: #6A7A72;
+  --text3: #9AACA4;
+  --yellow: #F5C842;
+  --yellow-d: #C8A020;
+  --yellow-bg: #FBF0B0;
+  --peach: #F5A882;
+  --peach-d: #D08060;
+  --sage: #82C070;
+  --sage-bg: #E4F2DA;
+  --pink: #F0A0B8;
+  --rose: #E89090;
+  --lavender: #A8A0D8;
+  --wood: #C8A070;
+  --wood-d: #9A7840;
+  --sky: #C8E8F8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--cream);
+  background-image: radial-gradient(circle, rgba(180,160,130,0.18) 1px, transparent 1px);
+  background-size: 22px 22px;
+  min-height: 100vh;
+  font-family: 'Quicksand', sans-serif;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card { background: var(--panel); border: 2px solid var(--border); border-radius: 16px; box-shadow: 3px 4px 0 var(--shadow); }
+.screen { display: none; width: 100%; max-width: 960px; }
+
+/* CREATE */
+#screen-create { flex-direction: column; align-items: center; justify-content: center; padding: 32px 20px; gap: 14px; min-height: 100vh; }
+#screen-create.active { display: flex; }
+.logo { font-size: 30px; font-weight: 700; color: var(--text); }
+.logo em { color: var(--peach); font-style: normal; }
+.tagline { font-size: 11px; color: var(--text3); font-weight: 600; letter-spacing: 0.3px; }
+.create-card { width: 100%; max-width: 600px; padding: 18px 22px; }
+.create-card h3 { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; }
+.name-inp { width: 100%; background: var(--cream); border: 2px solid var(--border); color: var(--text); font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: 600; padding: 10px 13px; border-radius: 10px; outline: none; }
+.name-inp:focus { border-color: var(--peach); }
+.career-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 7px; }
+.career-opt { background: var(--cream); border: 2px solid var(--border); border-radius: 12px; padding: 10px 12px; cursor: pointer; }
+.career-opt:hover { border-color: var(--wood); }
+.career-opt.sel { border-color: var(--peach); background: #FEF3ED; box-shadow: 0 2px 0 var(--peach-d); }
+.career-opt .cn { font-size: 11px; font-weight: 700; }
+.career-opt .cd { font-size: 8px; color: var(--text3); margin-top: 2px; font-weight: 600; }
+
+/* Cat picker */
+.cat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.cat-opt { border: 2.5px solid var(--border); border-radius: 14px; padding: 10px 6px 7px; cursor: pointer; background: var(--cream); text-align: center; }
+.cat-opt.sel { border-color: var(--peach); background: #FEF3ED; box-shadow: 0 2px 0 var(--peach-d); }
+.cat-opt canvas { display: block; margin: 0 auto 4px; }
+.cat-opt-name { font-size: 8px; font-weight: 700; color: var(--text2); }
+
+.btn-start { width: 100%; max-width: 600px; background: var(--yellow); border: 2.5px solid var(--yellow-d); border-radius: 12px; box-shadow: 0 4px 0 var(--yellow-d); color: #5A3A08; font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: 700; padding: 13px; cursor: pointer; }
+.btn-start:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--yellow-d); }
+
+/* HOME */
+#screen-home { flex-direction: column; min-height: 100vh; }
+#screen-home.active { display: flex; }
+.topbar { background: var(--panel); border-bottom: 2px solid var(--border); padding: 9px 16px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+.tb-logo { font-size: 15px; font-weight: 700; }
+.tb-logo em { color: var(--peach); font-style: normal; }
+.tb-day { font-size: 10px; font-weight: 700; color: var(--text3); }
+.tb-right { text-align: right; }
+.tb-money { font-size: 12px; font-weight: 700; color: var(--sage); }
+.tb-level { font-size: 8px; color: var(--text3); font-weight: 700; margin-top: 1px; }
+.middle { display: flex; flex: 1; min-height: 0; gap: 8px; padding: 8px; background: var(--beige); }
+
+/* LEFT */
+.panel-l { width: 185px; min-width: 185px; display: flex; flex-direction: column; gap: 7px; }
+.p-card { padding: 11px 13px; }
+.plabel { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; margin-bottom: 6px; }
+.char-name { font-size: 13px; font-weight: 700; }
+.char-career { font-size: 8px; color: var(--text3); margin-top: 2px; font-weight: 600; }
+.char-title-el { font-size: 8px; color: var(--lavender); font-weight: 700; margin-top: 1px; }
+.stat-group { display: flex; flex-direction: column; gap: 6px; }
+.srow { display: flex; align-items: center; gap: 5px; }
+.slabel { font-size: 8px; font-weight: 700; color: var(--text2); width: 52px; flex-shrink: 0; }
+.strack { flex: 1; height: 8px; background: var(--beige); border: 1.5px solid var(--border); border-radius: 99px; overflow: hidden; }
+.sfill { height: 100%; border-radius: 99px; transition: width 0.35s ease; }
+.fe { background: var(--yellow); }
+.fm { background: var(--pink); }
+.fs { background: var(--rose); }
+.fh { background: var(--sage); }
+.sval { font-size: 8px; font-weight: 700; color: var(--text3); width: 20px; text-align: right; }
+.ptrack { height: 8px; background: var(--beige); border: 1.5px solid var(--border); border-radius: 99px; overflow: hidden; margin-top: 4px; }
+.pfill { height: 100%; background: var(--lavender); border-radius: 99px; transition: width 0.4s ease; }
+.promo-xp { font-size: 8px; font-weight: 700; color: var(--text3); margin-bottom: 3px; }
+.cw-item { display: flex; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1.5px solid var(--beige); }
+.cw-badge { width: 26px; height: 26px; border-radius: 50%; background: var(--yellow-bg); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.cw-name { font-size: 9px; font-weight: 700; }
+.cw-role { font-size: 7px; color: var(--text3); font-weight: 600; }
+.cw-hearts { font-size: 8px; color: var(--pink); margin-left: auto; }
+
+/* CENTER scene */
+.panel-c { flex: 1; border-radius: 16px; border: 2px solid var(--border); box-shadow: 3px 4px 0 var(--shadow); overflow: hidden; position: relative; }
+.scene-notif { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); background: var(--yellow-bg); border: 2px solid var(--yellow-d); color: var(--text); font-size: 9px; font-weight: 700; padding: 5px 13px; border-radius: 99px; white-space: nowrap; display: none; z-index: 10; box-shadow: 0 2px 0 var(--yellow-d); }
+.scene-notif.on { display: block; }
+#office-canvas { display: block; width: 100%; height: 100%; min-height: 300px; }
+
+/* RIGHT */
+.panel-r { width: 185px; min-width: 185px; display: flex; flex-direction: column; gap: 7px; }
+.cal-hdr { font-size: 14px; font-weight: 700; }
+.cal-sub { font-size: 8px; color: var(--text3); font-weight: 700; }
+.sched-item { display: flex; align-items: baseline; gap: 5px; padding: 4px 0; border-bottom: 1.5px solid var(--beige); }
+.sched-time { font-size: 8px; font-weight: 700; color: var(--text3); width: 28px; }
+.sched-name { font-size: 9px; font-weight: 600; color: var(--text2); }
+.notif-item { font-size: 8px; color: var(--text2); padding: 4px 0; border-bottom: 1.5px solid var(--beige); font-weight: 600; line-height: 1.4; }
+.notif-item.new { color: var(--peach); font-weight: 700; }
+
+/* ACTION BAR */
+.actionbar { background: var(--panel); border-top: 2px solid var(--border); padding: 9px 14px; display: flex; gap: 7px; align-items: center; flex-shrink: 0; }
+.abtn { background: var(--cream); border: 2px solid var(--border); border-radius: 12px; box-shadow: 0 3px 0 var(--shadow); color: var(--text2); font-family: 'Quicksand', sans-serif; font-size: 8px; font-weight: 700; padding: 7px 9px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: all .1s; }
+.abtn span:first-child { font-size: 17px; }
+.abtn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 0 var(--shadow); border-color: var(--wood); }
+.abtn:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+.abtn:disabled { opacity: .32; cursor: default; }
+.abtn-start { background: var(--yellow); border-color: var(--yellow-d); box-shadow: 0 3px 0 var(--yellow-d); color: #5A3A08; margin-left: auto; font-size: 10px; flex-direction: row; gap: 5px; padding: 9px 16px; }
+.abtn-start:hover:not(:disabled) { border-color: var(--yellow-d); color: #5A3A08; background: #F7D040; }
+.speed-btn { background: var(--cream); border: 2px solid var(--border); border-radius: 8px; box-shadow: 0 2px 0 var(--shadow); color: var(--text3); font-family: 'Quicksand', sans-serif; font-size: 9px; font-weight: 700; padding: 4px 9px; cursor: pointer; }
+.speed-btn:hover { border-color: var(--peach); color: var(--text); }
+.speed-btn.active { background: var(--peach); border-color: var(--peach-d); color: white; box-shadow: 0 2px 0 var(--peach-d); }
+.spd-auto.active { background: var(--yellow); border-color: var(--yellow-d); color: #5A3A08; box-shadow: 0 2px 0 var(--yellow-d); }
+.tb-clock { font-size: 11px; font-weight: 700; color: var(--lavender); background: #F5F0FF; border: 1.5px solid var(--lavender); border-radius: 8px; padding: 3px 9px; }
+/* Messages */
+.msg-cw-btn { display:flex; align-items:center; gap:7px; padding:7px 8px; border-radius:10px; cursor:pointer; border:2px solid transparent; background:transparent; width:100%; text-align:left; font-family:'Quicksand',sans-serif; }
+.msg-cw-btn:hover { background:var(--cream); }
+.msg-cw-btn.active { background:var(--yellow-bg); border-color:var(--border); }
+.msg-cw-name { font-size:9px; font-weight:700; color:var(--text); }
+.msg-cw-role { font-size:7px; color:var(--text3); font-weight:600; }
+.msg-unread { width:8px; height:8px; background:var(--peach); border-radius:50%; margin-left:auto; flex-shrink:0; }
+.msg-bubble { max-width:80%; padding:8px 11px; border-radius:14px; font-size:10px; font-weight:600; line-height:1.5; }
+.msg-bubble.them { background:var(--beige); border:1.5px solid var(--border); color:var(--text); border-radius:14px 14px 14px 2px; align-self:flex-start; }
+.msg-bubble.me { background:var(--lavender); color:white; border-radius:14px 14px 2px 14px; align-self:flex-end; }
+.msg-bubble.typing { background:var(--beige); color:var(--text3); font-style:italic; align-self:flex-start; }
+.msg-opt-btn { background:var(--cream); border:1.5px solid var(--border); border-radius:10px; padding:6px 10px; cursor:pointer; font-family:'Quicksand',sans-serif; font-size:9px; font-weight:700; color:var(--text2); text-align:left; }
+.msg-opt-btn:hover { border-color:var(--peach); background:#FEF3ED; }
+
+/* WORKDAY */
+#screen-workday { flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 16px; min-height: 100vh; }
+#screen-workday.active { display: flex; }
+.wd-hdr { text-align: center; }
+.wd-hdr h2 { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; }
+.wd-title { font-size: 14px; font-weight: 700; margin-top: 3px; }
+.prog-dots { display: flex; gap: 8px; }
+.pdot { width: 10px; height: 10px; border-radius: 50%; background: var(--beige); border: 2px solid var(--border); transition: background .2s; }
+.pdot.done { background: var(--yellow); border-color: var(--yellow-d); }
+.pdot.cur { background: var(--peach); border-color: var(--peach-d); }
+.evcard { width: 100%; max-width: 520px; overflow: hidden; }
+.evc-hdr { background: var(--beige); border-bottom: 2px solid var(--border); padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-radius: 14px 14px 0 0; }
+.evc-icon { font-size: 18px; }
+.evc-type { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; }
+.evc-body { padding: 18px 18px 12px; }
+.evc-title { font-size: 16px; font-weight: 700; margin-bottom: 7px; line-height: 1.3; }
+.evc-desc { font-size: 11px; color: var(--text2); line-height: 1.7; font-weight: 600; }
+.evc-choices { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 8px; }
+.choice-btn { background: var(--cream); border: 2px solid var(--border); border-radius: 12px; box-shadow: 0 3px 0 var(--shadow); color: var(--text); font-family: 'Quicksand', sans-serif; font-size: 11px; font-weight: 600; padding: 11px 13px; cursor: pointer; text-align: left; line-height: 1.4; transition: all .1s; }
+.choice-btn:hover { border-color: var(--peach); background: #FEF3ED; transform: translateY(-1px); box-shadow: 0 4px 0 var(--shadow); }
+.choice-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--shadow); }
+.outcome-box { width: 100%; max-width: 520px; padding: 22px; text-align: center; display: none; }
+.outcome-box.on { display: block; }
+.out-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; font-style: italic; }
+.out-deltas { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.delta { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
+.dpos { background: var(--sage-bg); color: #3A7A40; }
+.dneg { background: #FCE8E8; color: #A04040; }
+.out-story { font-size: 10px; color: var(--text3); line-height: 1.7; font-weight: 600; }
+.btn-cont { margin-top: 14px; background: var(--yellow); border: 2.5px solid var(--yellow-d); border-radius: 12px; box-shadow: 0 4px 0 var(--yellow-d); color: #5A3A08; font-family: 'Quicksand', sans-serif; font-size: 12px; font-weight: 700; padding: 10px 22px; cursor: pointer; }
+.btn-cont:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--yellow-d); }
+
+/* EOD */
+#screen-eod { flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; gap: 13px; min-height: 100vh; }
+#screen-eod.active { display: flex; }
+.eod-hdr { text-align: center; }
+.eod-hdr h2 { font-size: 22px; font-weight: 700; }
+.eod-hdr p { font-size: 10px; color: var(--text3); margin-top: 3px; font-weight: 700; }
+.eod-promo { background: #FEF3ED; border: 2.5px solid var(--peach); border-radius: 16px; box-shadow: 0 4px 0 var(--peach-d); padding: 14px 20px; width: 100%; max-width: 460px; text-align: center; display: none; }
+.eod-promo.on { display: block; }
+.eod-promo-t { font-size: 18px; font-weight: 700; }
+.eod-promo-s { font-size: 10px; color: var(--text2); margin-top: 2px; font-weight: 700; }
+.eod-card { width: 100%; max-width: 460px; padding: 18px; }
+.eod-slabel { font-size: 8px; font-weight: 700; letter-spacing: 1.5px; color: var(--text3); text-transform: uppercase; margin-bottom: 11px; }
+.eod-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.eod-stat { background: var(--cream); border: 2px solid var(--border); padding: 9px 11px; border-radius: 12px; }
+.eod-stat-n { font-size: 8px; color: var(--text3); font-weight: 700; }
+.eod-stat-v { font-size: 16px; font-weight: 700; margin-top: 2px; }
+.eod-stories { font-size: 9px; color: var(--text2); line-height: 2; border-top: 2px solid var(--beige); padding-top: 10px; margin-top: 6px; font-weight: 700; }
+.btn-nextday { width: 100%; max-width: 460px; background: var(--yellow); border: 2.5px solid var(--yellow-d); border-radius: 12px; box-shadow: 0 4px 0 var(--yellow-d); color: #5A3A08; font-family: 'Quicksand', sans-serif; font-size: 14px; font-weight: 700; padding: 13px; cursor: pointer; }
+.btn-nextday:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--yellow-d); }
+
+/* SHOP */
+#screen-shop { flex-direction: column; align-items: center; padding: 30px 20px; gap: 13px; min-height: 100vh; }
+#screen-shop.active { display: flex; }
+.shop-hdr { text-align: center; }
+.shop-hdr h2 { font-size: 22px; font-weight: 700; }
+.shop-bal { font-size: 10px; color: var(--sage); margin-top: 3px; font-weight: 700; }
+.shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; width: 100%; max-width: 500px; }
+.shop-item { padding: 13px; }
+.shop-item.owned { opacity: .6; }
+.si-icon { font-size: 22px; margin-bottom: 5px; }
+.si-name { font-size: 11px; font-weight: 700; }
+.si-desc { font-size: 8px; color: var(--text3); margin-top: 2px; line-height: 1.4; font-weight: 600; }
+.si-price { font-size: 10px; font-weight: 700; color: var(--sage); margin-top: 7px; }
+.si-bonus { font-size: 8px; color: var(--lavender); font-weight: 700; margin-top: 1px; }
+.btn-buy { margin-top: 9px; background: var(--cream); border: 2px solid var(--border); border-radius: 9px; box-shadow: 0 2px 0 var(--shadow); color: var(--text2); font-family: 'Quicksand', sans-serif; font-size: 9px; font-weight: 700; padding: 5px 11px; cursor: pointer; }
+.btn-buy:hover:not([disabled]) { border-color: var(--yellow-d); }
+.btn-back { background: transparent; border: 2px solid var(--border); border-radius: 10px; color: var(--text3); font-family: 'Quicksand', sans-serif; font-size: 11px; font-weight: 700; padding: 8px 16px; cursor: pointer; }
+.btn-back:hover { color: var(--text); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+.fade { animation: fadeUp .22s ease; }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
+.o-char { animation: float 3s ease-in-out infinite; }
+</style>
+</head>
+<body>
+
+<!-- CREATE -->
+<div id="screen-create" class="screen">
+  <div class="logo">Office<em>Life</em></div>
+  <div class="tagline">Grow your career. Survive the meetings. Find your work bestie.</div>
+  <div class="create-card card">
+    <h3>Your Name</h3>
+    <input class="name-inp" id="inp-name" type="text" placeholder="What should we call you?" maxlength="20">
+  </div>
+  <div class="create-card card">
+    <h3>Your Career</h3>
+    <div class="career-grid" id="career-grid"></div>
+  </div>
+  <div class="create-card card">
+    <h3>Choose Your Cat</h3>
+    <div class="cat-grid" id="cat-grid"></div>
+  </div>
+  <button class="btn-start" id="btn-begin">Start My Career ✨</button>
+</div>
+
+<!-- HOME -->
+<div id="screen-home" class="screen">
+  <div class="topbar">
+    <div class="tb-logo">Office<em>Life</em></div>
+    <div class="tb-day" id="tb-day">Day 1 · Monday</div>
+    <div class="tb-clock" id="tb-clock">9:00 AM</div>
+    <div class="tb-right">
+      <div class="tb-money" id="tb-money">$0</div>
+      <div class="tb-level" id="tb-level">Intern</div>
+    </div>
+  </div>
+  <div class="middle">
+    <div class="panel-l">
+      <div class="p-card card">
+        <div class="plabel">Employee</div>
+        <div class="char-name" id="hp-name">—</div>
+        <div class="char-career" id="hp-career">—</div>
+        <div class="char-title-el" id="hp-title">Intern</div>
+      </div>
+      <div class="p-card card">
+        <div class="plabel">Stats</div>
+        <div class="stat-group">
+          <div class="srow"><span class="slabel">⚡ Energy</span><div class="strack"><div class="sfill fe" id="bar-e" style="width:80%"></div></div><span class="sval" id="val-e">80</span></div>
+          <div class="srow"><span class="slabel">☺ Morale</span><div class="strack"><div class="sfill fm" id="bar-m" style="width:70%"></div></div><span class="sval" id="val-m">70</span></div>
+          <div class="srow"><span class="slabel">⚠ Stress</span><div class="strack"><div class="sfill fs" id="bar-s" style="width:20%"></div></div><span class="sval" id="val-s">20</span></div>
+          <div class="srow"><span class="slabel">🍙 Hunger</span><div class="strack"><div class="sfill fh" id="bar-h" style="width:60%"></div></div><span class="sval" id="val-h">60</span></div>
+        </div>
+      </div>
+      <div class="p-card card">
+        <div class="plabel">Promotion</div>
+        <div class="promo-xp" id="promo-xp">0 / 30 XP</div>
+        <div class="ptrack"><div class="pfill" id="bar-promo" style="width:0%"></div></div>
+      </div>
+      <div class="p-card card" style="flex:1">
+        <div class="plabel">Coworkers</div>
+        <div id="cw-list"></div>
+      </div>
+    </div>
+
+    <!-- CENTER OFFICE SCENE -->
+    <div class="panel-c">
+      <div class="scene-notif" id="scene-notif"></div>
+      <canvas id="office-canvas"></canvas>
+    </div>
+
+    <div class="panel-r">
+      <div class="p-card card">
+        <div class="cal-hdr" id="cal-hdr">Monday</div>
+        <div class="cal-sub" id="cal-sub">Day 1</div>
+      </div>
+      <div class="p-card card" style="flex:1">
+        <div class="plabel" style="margin-bottom:5px">Today's Schedule</div>
+        <div id="sched-list"></div>
+      </div>
+      <div class="p-card card">
+        <div class="plabel" style="margin-bottom:5px">Updates</div>
+        <div id="notif-list"></div>
+      </div>
+    </div>
+  </div>
+  <div class="actionbar">
+    <button class="abtn" id="abtn-coffee" onclick="preAct('coffee')"><span>☕</span><span>Coffee</span></button>
+    <button class="abtn" id="abtn-lunch" onclick="preAct('lunch')"><span>🥗</span><span>Lunch</span></button>
+    <button class="abtn" id="abtn-chat" onclick="preAct('chat')"><span>💬</span><span>Chat</span></button>
+    <button class="abtn" onclick="go('shop')"><span>🛍</span><span>Shop</span></button>
+    <button class="abtn" onclick="openMessages()"><span>📨</span><span>Messages</span></button>
+    <button class="abtn abtn-start" onclick="startWorkday()">▶ Start Workday</button>
+  </div>
+</div>
+
+<!-- MESSAGES MODAL -->
+<div id="messages-modal" style="display:none;position:fixed;inset:0;background:rgba(62,78,80,0.35);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:var(--panel);border:2.5px solid var(--border);border-radius:20px;box-shadow:4px 6px 0 var(--shadow);width:560px;max-width:95vw;height:480px;display:flex;flex-direction:column;overflow:hidden;">
+    <div style="padding:13px 18px;border-bottom:2px solid var(--beige);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;">
+      <div style="font-size:14px;font-weight:700;color:var(--text);">📨 Messages</div>
+      <button onclick="closeMessages()" style="background:var(--cream);border:2px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-size:12px;font-weight:700;color:var(--text3);">Close</button>
+    </div>
+    <div style="display:flex;flex:1;min-height:0;">
+      <div id="msg-sidebar" style="width:150px;flex-shrink:0;border-right:2px solid var(--beige);padding:8px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;"></div>
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+        <div id="msg-cw-header" style="padding:10px 14px;border-bottom:2px solid var(--beige);font-size:11px;font-weight:700;color:var(--text3);flex-shrink:0;">Select a coworker</div>
+        <div id="msg-thread" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;"></div>
+        <div id="msg-options" style="padding:8px 12px;border-top:2px solid var(--beige);display:flex;flex-direction:column;gap:5px;flex-shrink:0;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKDAY -->
+<div id="screen-workday" class="screen">
+  <div class="wd-hdr">
+    <h2>Workday · <span id="wd-day">Day 1</span></h2>
+    <div class="wd-title" id="wd-type">Loading...</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <div class="prog-dots" id="prog-dots"></div>
+    <div style="display:flex;gap:5px;margin-left:8px;">
+      <button class="speed-btn" id="spd-1" onclick="setSpeed(1)">1×</button>
+      <button class="speed-btn" id="spd-2" onclick="setSpeed(2)">2×</button>
+      <button class="speed-btn spd-auto" id="spd-auto" onclick="setSpeed('auto')">⚡ Auto</button>
+    </div>
+    <div id="wd-clock" style="font-size:11px;font-weight:700;color:var(--text3);margin-left:4px;"></div>
+  </div>
+  <div id="auto-bar-wrap" style="width:100%;max-width:520px;height:4px;background:var(--beige);border-radius:99px;overflow:hidden;display:none;">
+    <div id="auto-bar" style="height:100%;background:var(--peach);border-radius:99px;width:0%;transition:width 0.1s linear;"></div>
+  </div>
+  <div class="evcard card fade" id="evcard">
+    <div class="evc-hdr"><span class="evc-icon" id="ec-icon">📅</span><span class="evc-type" id="ec-type">Event</span></div>
+    <div class="evc-body"><div class="evc-title" id="ec-title"></div><div class="evc-desc" id="ec-desc"></div></div>
+    <div class="evc-choices" id="ec-choices"></div>
+  </div>
+  <div class="outcome-box card" id="outcome-box">
+    <div class="out-title" id="out-title"></div>
+    <div class="out-deltas" id="out-deltas"></div>
+    <div class="out-story" id="out-story"></div>
+    <button class="btn-cont" onclick="nextEv()">Keep going →</button>
+  </div>
+</div>
+
+<!-- EOD -->
+<div id="screen-eod" class="screen">
+  <div class="eod-hdr"><h2>🌙 End of Day</h2><p id="eod-lbl">Day 1 Complete</p></div>
+  <div class="eod-promo card" id="eod-promo"><div class="eod-promo-t" id="eod-promo-t">🎉 Promoted!</div><div class="eod-promo-s" id="eod-promo-s"></div></div>
+  <div class="eod-card card">
+    <div class="eod-slabel">Today's wrap-up</div>
+    <div class="eod-grid">
+      <div class="eod-stat"><div class="eod-stat-n">Salary Earned</div><div class="eod-stat-v" id="eod-sal">+$280</div></div>
+      <div class="eod-stat"><div class="eod-stat-n">XP Earned</div><div class="eod-stat-v" id="eod-xp">+0 XP</div></div>
+      <div class="eod-stat"><div class="eod-stat-n">Total Savings</div><div class="eod-stat-v" id="eod-tot">$0</div></div>
+      <div class="eod-stat"><div class="eod-stat-n">Career Level</div><div class="eod-stat-v" id="eod-lvl">Intern</div></div>
+    </div>
+    <div class="eod-stories" id="eod-stories"></div>
+  </div>
+  <button class="btn-nextday" onclick="nextDay()">Start Day <span id="eod-next">2</span> ☀️</button>
+</div>
+
+<!-- SHOP -->
+<div id="screen-shop" class="screen">
+  <div class="shop-hdr"><h2>🛍 Office Shop</h2><div class="shop-bal">Your savings: <span id="shop-bal">$0</span></div></div>
+  <div class="shop-grid" id="shop-grid"></div>
+  <button class="btn-back" onclick="go('home')">← Back to the office</button>
+</div>
+
+<script>
+// ── Cat definitions ──────────────────────────────────────
+const CATS = [
+  { id:'orange', name:'Orange Tabby', body:'#F5A855', stripe:'#D87820', belly:'#FDE0B0', nose:'#E07060', inner:'#F8C0A0' },
+  { id:'grey',   name:'Grey Tabby',   body:'#A0A8B0', stripe:'#707880', belly:'#E8E8E8', nose:'#C08090', inner:'#D0C8D0' },
+  { id:'black',  name:'Black Cat',    body:'#2A2A30', stripe:'#1A1A20', belly:'#504858', nose:'#C06878', inner:'#403840' },
+  { id:'white',  name:'Snow Puff',    body:'#F8F4F0', stripe:'#E0D8D0', belly:'#FFFFFF', nose:'#F0A0A8', inner:'#F8E8E8' },
+  { id:'calico', name:'Calico',       body:'#F5E0C0', stripe:'#C87030', belly:'#FFF8F0', nose:'#E07060', inner:'#F8C8A8' },
+];
+
+// Draw a cat face on a canvas element
+function drawCat(canvas, catIdx, size=48) {
+  const c = CATS[catIdx] || CATS[0];
+  canvas.width = size; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const cx = size/2, cy = size/2 + 4;
+  const r = size * 0.34;
+
+  // ears
+  ctx.fillStyle = c.body;
+  [[cx-r*.55, cy-r*.85],[cx+r*.55, cy-r*.85]].forEach(([ex,ey]) => {
+    ctx.beginPath(); ctx.moveTo(ex-r*.28,ey+r*.2); ctx.lineTo(ex,ey-r*.38); ctx.lineTo(ex+r*.28,ey+r*.2); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = c.inner; ctx.beginPath(); ctx.moveTo(ex-r*.15,ey+r*.1); ctx.lineTo(ex,ey-r*.22); ctx.lineTo(ex+r*.15,ey+r*.1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = c.body;
+  });
+
+  // head
+  ctx.fillStyle = c.body;
+  ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI*2); ctx.fill();
+
+  // stripe markings (tabby)
+  if(catIdx !== 3) { // not white
+    ctx.fillStyle = c.stripe; ctx.globalAlpha = 0.35;
+    [[-r*.2,-r*.15],[0,-r*.15],[r*.2,-r*.15]].forEach(([ox,oy]) => {
+      ctx.fillRect(cx+ox-1, cy+oy, 2, r*.3);
+    });
+    ctx.globalAlpha = 1;
+  }
+
+  // calico patches
+  if(catIdx === 4) {
+    ctx.fillStyle = '#C87030'; ctx.globalAlpha = 0.5;
+    ctx.beginPath(); ctx.ellipse(cx-r*.3, cy-r*.1, r*.28, r*.22, -0.4, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#2A1A0A'; ctx.globalAlpha = 0.2;
+    ctx.beginPath(); ctx.ellipse(cx+r*.25, cy+r*.05, r*.22, r*.18, 0.3, 0, Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  // belly/chin
+  ctx.fillStyle = c.belly;
+  ctx.beginPath(); ctx.ellipse(cx, cy+r*.28, r*.42, r*.3, 0, 0, Math.PI*2); ctx.fill();
+
+  // eyes
+  ctx.fillStyle = '#1A1008';
+  ctx.beginPath(); ctx.ellipse(cx-r*.32, cy-r*.08, r*.13, r*.16, 0, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+r*.32, cy-r*.08, r*.13, r*.16, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'white';
+  ctx.beginPath(); ctx.arc(cx-r*.26, cy-r*.14, r*.05, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(cx+r*.37, cy-r*.14, r*.05, 0, Math.PI*2); ctx.fill();
+
+  // nose
+  ctx.fillStyle = c.nose;
+  ctx.beginPath(); ctx.arc(cx, cy+r*.1, r*.08, 0, Math.PI*2); ctx.fill();
+
+  // mouth
+  ctx.strokeStyle = c.nose; ctx.lineWidth = 1.2; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx,cy+r*.18); ctx.lineTo(cx-r*.15,cy+r*.26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx,cy+r*.18); ctx.lineTo(cx+r*.15,cy+r*.26); ctx.stroke();
+
+  // whiskers
+  ctx.strokeStyle = catIdx===1?'#888':'#CCC'; ctx.lineWidth=0.8; ctx.globalAlpha=0.7;
+  [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([dx,dy]) => {
+    ctx.beginPath(); ctx.moveTo(cx+dx*r*.12, cy+r*.1); ctx.lineTo(cx+dx*r*.55, cy+dy*r*.05); ctx.stroke();
+  });
+  ctx.globalAlpha=1;
+}
+
+// Draw cat with tiny office outfit
+function drawOfficeCat(canvas, catIdx, size=54) {
+  const c = CATS[catIdx] || CATS[0];
+  canvas.width = size; canvas.height = size+20;
+  const ctx = canvas.getContext('2d');
+  const cx = size/2, headY = size/2 - 4;
+  const r = size * 0.3;
+
+  // tiny body / shirt
+  ctx.fillStyle = '#A8C0E8';
+  ctx.beginPath(); ctx.roundRect(cx-r*.7, headY+r*.8, r*1.4, r*1.1, 4); ctx.fill();
+  ctx.strokeStyle='#8AAAD0'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.roundRect(cx-r*.7, headY+r*.8, r*1.4, r*1.1, 4); ctx.stroke();
+  // collar
+  ctx.fillStyle='white'; ctx.globalAlpha=0.7;
+  ctx.beginPath(); ctx.moveTo(cx,headY+r*.9); ctx.lineTo(cx-r*.2,headY+r*1.4); ctx.lineTo(cx+r*.2,headY+r*1.4); ctx.closePath(); ctx.fill();
+  ctx.globalAlpha=1;
+  // badge/ID
+  ctx.fillStyle='#F5C842'; ctx.strokeStyle='#C8A020'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.roundRect(cx+r*.2, headY+r*1.0, r*.35, r*.28, 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#5A3A08'; ctx.font=`bold ${Math.floor(r*.15)}px sans-serif`; ctx.textAlign='center';
+  ctx.fillText('ID', cx+r*.37, headY+r*1.2);
+
+  // arms
+  ctx.fillStyle = '#A8C0E8';
+  ctx.beginPath(); ctx.roundRect(cx-r*1.1, headY+r*.85, r*.4, r*.7, 3); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(cx+r*.7, headY+r*.85, r*.4, r*.7, 3); ctx.fill();
+  // paws
+  ctx.fillStyle = c.body;
+  ctx.beginPath(); ctx.ellipse(cx-r*.9, headY+r*1.55, r*.22, r*.18, 0.2, 0, Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+r*.9, headY+r*1.55, r*.22, r*.18, -0.2, 0, Math.PI*2); ctx.fill();
+  // left paw holds a mug
+  ctx.fillStyle='white'; ctx.strokeStyle='#E0C8C0'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.roundRect(cx-r*1.08, headY+r*1.45, r*.26, r*.22, 2); ctx.fill(); ctx.stroke();
+  ctx.fillStyle='#C87850'; ctx.fillRect(cx-r*1.04, headY+r*1.48, r*.18, r*.12);
+
+  // ears
+  ctx.fillStyle = c.body;
+  [[cx-r*.5, headY-r*.8],[cx+r*.5, headY-r*.8]].forEach(([ex,ey]) => {
+    ctx.beginPath(); ctx.moveTo(ex-r*.25,ey+r*.18); ctx.lineTo(ex,ey-r*.32); ctx.lineTo(ex+r*.25,ey+r*.18); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=c.inner; ctx.beginPath(); ctx.moveTo(ex-r*.12,ey+r*.1); ctx.lineTo(ex,ey-r*.18); ctx.lineTo(ex+r*.12,ey+r*.1); ctx.closePath(); ctx.fill();
+    ctx.fillStyle=c.body;
+  });
+
+  // head
+  ctx.fillStyle = c.body;
+  ctx.beginPath(); ctx.arc(cx, headY, r, 0, Math.PI*2); ctx.fill();
+
+  // calico patch
+  if(catIdx===4){ctx.fillStyle='#C87030';ctx.globalAlpha=0.45;ctx.beginPath();ctx.ellipse(cx-r*.3,headY-r*.1,r*.25,r*.2,-0.4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;}
+
+  // stripe
+  if(catIdx!==3){ctx.fillStyle=c.stripe;ctx.globalAlpha=0.3;[[-r*.18,-r*.15],[0,-r*.15],[r*.18,-r*.15]].forEach(([ox,oy])=>{ctx.fillRect(cx+ox-1,headY+oy,2,r*.28);});ctx.globalAlpha=1;}
+
+  // belly
+  ctx.fillStyle=c.belly;ctx.beginPath();ctx.ellipse(cx,headY+r*.25,r*.38,r*.26,0,0,Math.PI*2);ctx.fill();
+
+  // eyes
+  ctx.fillStyle='#1A1008';ctx.beginPath();ctx.ellipse(cx-r*.3,headY-r*.07,r*.11,r*.14,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(cx+r*.3,headY-r*.07,r*.11,r*.14,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='white';ctx.beginPath();ctx.arc(cx-r*.24,headY-r*.13,r*.04,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(cx+r*.35,headY-r*.13,r*.04,0,Math.PI*2);ctx.fill();
+
+  // nose
+  ctx.fillStyle=c.nose;ctx.beginPath();ctx.arc(cx,headY+r*.1,r*.07,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=c.nose;ctx.lineWidth=1;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(cx,headY+r*.17);ctx.lineTo(cx-r*.13,headY+r*.24);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,headY+r*.17);ctx.lineTo(cx+r*.13,headY+r*.24);ctx.stroke();
+
+  // whiskers
+  ctx.strokeStyle=catIdx===1?'#888':'#DDD';ctx.lineWidth=0.8;ctx.globalAlpha=0.6;
+  [[-1,1],[1,1],[-1,-1],[1,-1]].forEach(([dx,dy])=>{ctx.beginPath();ctx.moveTo(cx+dx*r*.1,headY+r*.1);ctx.lineTo(cx+dx*r*.5,headY+dy*r*.04);ctx.stroke();});
+  ctx.globalAlpha=1;
+
+  // tail
+  ctx.strokeStyle=c.body;ctx.lineWidth=r*.32;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(cx+r*.6,headY+r*1.5);ctx.quadraticCurveTo(cx+r*1.5,headY+r*1.8,cx+r*1.2,headY+r*.9);ctx.stroke();
+  ctx.strokeStyle=c.stripe;ctx.lineWidth=r*.08;ctx.globalAlpha=0.3;
+  ctx.beginPath();ctx.moveTo(cx+r*.7,headY+r*1.4);ctx.quadraticCurveTo(cx+r*1.45,headY+r*1.7,cx+r*1.15,headY+r*.95);ctx.stroke();
+  ctx.globalAlpha=1;
+}
+
+// Draw small coworker cat (sleeping/sitting)
+function drawCoworkerCat(canvas, catIdx, size=34) {
+  const c = CATS[catIdx%CATS.length];
+  canvas.width = size*1.4; canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  const cx = size*.5, cy = size*.55, r = size*.28;
+  // curled body
+  ctx.fillStyle=c.body;ctx.beginPath();ctx.ellipse(cx+r*.4,cy+r*.2,r*1.1,r*.7,0.3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=c.belly;ctx.beginPath();ctx.ellipse(cx+r*.5,cy+r*.3,r*.7,r*.45,0.3,0,Math.PI*2);ctx.fill();
+  // head
+  ctx.fillStyle=c.body;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();
+  // ears
+  [[cx-r*.4,cy-r*.7],[cx+r*.35,cy-r*.75]].forEach(([ex,ey])=>{ctx.fillStyle=c.body;ctx.beginPath();ctx.moveTo(ex-r*.18,ey+r*.15);ctx.lineTo(ex,ey-r*.28);ctx.lineTo(ex+r*.18,ey+r*.15);ctx.closePath();ctx.fill();ctx.fillStyle=c.inner;ctx.beginPath();ctx.moveTo(ex-r*.09,ey+r*.08);ctx.lineTo(ex,ey-r*.16);ctx.lineTo(ex+r*.09,ey+r*.08);ctx.closePath();ctx.fill();});
+  // closed eyes (sleeping)
+  ctx.strokeStyle='#1A1008';ctx.lineWidth=1.2;ctx.lineCap='round';
+  ctx.beginPath();ctx.arc(cx-r*.28,cy-r*.05,r*.1,Math.PI*.1,Math.PI*.9);ctx.stroke();
+  ctx.beginPath();ctx.arc(cx+r*.28,cy-r*.05,r*.1,Math.PI*.1,Math.PI*.9);ctx.stroke();
+  ctx.fillStyle=c.nose;ctx.beginPath();ctx.arc(cx,cy+r*.12,r*.06,0,Math.PI*2);ctx.fill();
+  // tail curl
+  ctx.strokeStyle=c.body;ctx.lineWidth=r*.28;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(cx+r*1.4,cy+r*.5);ctx.quadraticCurveTo(cx+r*1.9,cy,cx+r*1.3,cy-.3);ctx.stroke();
+}
+
+// ── Game data ──────────────────────────────────────────────
+const CAREERS={pm:{name:'Product Manager',emoji:'📋',desc:'Own the roadmap. Apologize constantly.',sal:280},eng:{name:'Software Engineer',emoji:'💻',desc:'Ship features. Fix bugs. Repeat.',sal:320},design:{name:'UX Designer',emoji:'🎨',desc:'Make it beautiful. Defend every pixel.',sal:260},mkt:{name:'Marketing',emoji:'📣',desc:'Drive awareness. Measure everything. Pivot.',sal:240},sales:{name:'Sales',emoji:'🤝',desc:'Hit quota. Build pipeline. Hustle.',sal:300},hr:{name:'HR',emoji:'🫂',desc:'Support people. Navigate everything.',sal:250}};
+const TITLES=['Intern','Junior Associate','Associate','Senior Associate','Lead','Manager','Director','VP','Chief of Staff','CEO'];
+const COWORKERS=[{id:'coffee',name:'Jordan',role:'The Coffee Addict',catIdx:1,day:1},{id:'meet',name:'Blake',role:'The Meeting Lover',catIdx:2,day:3},{id:'expert',name:'Sam',role:'The Quiet Expert',catIdx:3,day:5},{id:'new',name:'Riley',role:'The New Hire',catIdx:4,day:7}];
+const DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Monday','Tuesday','Wednesday','Thursday','Friday'];
+const HOUR_LABELS=['9:00 AM','10:30 AM','12:00 PM','1:30 PM','3:00 PM','4:30 PM','5:00 PM'];
+const XP_PER=150;
+
+const CW_CHATS={
+  coffee:{
+    name:'Jordan',greeting:['omg good morning ☕','didnt exist until my 3rd coffee','coffee o clock already??'],
+    topics:[
+      {q:"How's your morning?",a:"Honestly? Didn't exist until my third coffee. Still not sure I'm fully here. You?"},
+      {q:"Any coffee recommendations?",a:"Ethiopian single origin, light roast, pour-over. Life-changing. Don't settle for the breakroom stuff 😤"},
+      {q:"Long day ahead?",a:"Every day is a long day without sufficient caffeine. I've got my thermos so I'll survive."},
+      {q:"Grab coffee together later?",a:"I thought you'd never ask 🙏 I know which machine has the best espresso pull timing. Meet me at 3?"},
+      {q:"How are you holding up?",a:"3 coffees in and I'm starting to feel like a person again. Functioning at maybe 60% capacity. Send help (or beans)."},
+    ]
+  },
+  meet:{
+    name:'Blake',greeting:['Hey! Got a sec to sync? 📅','Quick touch-base?','I blocked time for us later!'],
+    topics:[
+      {q:"What's on your calendar today?",a:"Back-to-backs until 4pm but I found a 15-minute gap we could use for alignment. Does that work?"},
+      {q:"Can we reschedule something?",a:"Of course! Let me pull up the shared cal. Does Tuesday at 2 work, or should we find a recurring slot?"},
+      {q:"How's the team doing?",a:"I think we need a retro to answer that properly. Should I send an invite? I'm thinking 45min, async prep doc beforehand."},
+      {q:"Too many meetings today?",a:"Six so far and I'm honestly thriving. Structure is my love language. Do you want me to block some focus time for you?"},
+      {q:"What are you working on?",a:"Preparing the agenda for the all-hands. Also optimizing my calendar color-coding system. It's an art form, truly."},
+    ]
+  },
+  expert:{
+    name:'Sam',greeting:['...','Hey.','Working on something interesting?'],
+    topics:[
+      {q:"Need advice on a project.",a:"What's the actual problem you're solving? Not the symptom — the root cause. Walk me through it."},
+      {q:"How do you stay so focused?",a:"Deep work blocks. No Slack. No meetings before noon. Took 6 months to get people to respect it, but worth it."},
+      {q:"Can you review my work?",a:"Send it over. I'll give you notes by EOD. Real notes — not just 'looks good.' You want feedback, right?"},
+      {q:"What are you building?",a:"Something I can't talk about yet. But it's going to change how the team operates. Maybe. If it works."},
+      {q:"How long have you been here?",a:"Four years. Long enough to know which processes are broken and which ones are broken but load-bearing."},
+    ]
+  },
+  new:{
+    name:'Riley',greeting:['Hi!! 👋','Do you know where the bathroom is? Third time asking lol','How long does lunch usually take here?'],
+    topics:[
+      {q:"How's your first week going?",a:"SO much to learn!! Everyone uses acronyms I don't know yet. What's a PRD? What's a synergy? Is synergy real??"},
+      {q:"Need help with anything?",a:"YES. How do I get access to the shared drive? I've asked IT twice but the ticket just... exists. In the void."},
+      {q:"Tips for settling in?",a:"I've been writing everything down. Is that weird? It feels like a lot. Also who do I ask about the snack budget??"},
+      {q:"What did you think of onboarding?",a:"Genuinely loved it! Except the three hours of compliance videos. I think I watched them correctly? There was a quiz."},
+      {q:"What's your role here?",a:"Still figuring that out honestly lol. My job description said 'and other duties as assigned' a lot. Very mysterious."},
+    ]
+  }
+};
+
+const SCHEDULES=[[{t:'9am',n:'Standup'},{t:'10am',n:'Focus Work'},{t:'12pm',n:'Lunch'},{t:'2pm',n:'Team Meeting'},{t:'4pm',n:'Wrap-up'}],[{t:'9am',n:'Standup'},{t:'10am',n:'1:1 w/ Manager'},{t:'12pm',n:'Lunch'},{t:'1pm',n:'Focus Work'},{t:'3pm',n:'All-Hands'}],[{t:'9am',n:'Standup'},{t:'11am',n:'Cross-team Sync'},{t:'12pm',n:'Lunch'},{t:'2pm',n:'Focus Work'},{t:'5pm',n:'Happy Hour?'}]];
+
+const EVENTS=[
+  {id:'ceo',type:'Surprise',icon:'😱',title:'The CEO just joined your meeting.',desc:'You were not prepared. Nobody was prepared.',choices:[{text:'Stay calm and carry on — you\'ve got this.',o:{e:-5,m:5,s:10,x:8,story:'Stayed cool when the CEO surprise-joined your meeting.'}},{text:'Improvise a deep-dive on your recent work.',o:{e:-15,m:-5,s:20,x:12,story:'Improvised a CEO presentation that somehow worked.'}},{text:'Quietly mute yourself and process.',o:{e:-5,m:-10,s:15,x:3,story:'Survived a surprise CEO meeting by staying very, very quiet.'}}]},
+  {id:'pizza',type:'Notification',icon:'🍕',title:'Free pizza in the break room.',desc:'Someone ordered 12 pizzas for a meeting that got cancelled. It\'s beautiful chaos.',choices:[{text:'Drop everything. Pizza waits for no one.',o:{h:40,m:20,e:10,s:-10,x:2,story:'Sprinted to the break room for free pizza. Zero regrets.'}},{text:'Finish this task first. Be responsible.',o:{m:-5,s:5,x:5,story:'Missed the free pizza because you were "being professional."'}},{text:'Grab a slice and bring it back to your desk.',o:{h:20,m:10,e:5,x:3,story:'Attended pizza and completed work. Peak efficiency.'}}]},
+  {id:'laptop',type:'Crisis',icon:'💻',title:'Your laptop just died. Mid-presentation.',desc:'The screen went black. Forty people are watching.',choices:[{text:'Borrow someone\'s laptop and keep going.',o:{e:-10,s:15,m:-5,x:8,story:'Survived a laptop death mid-presentation by speed-borrowing hardware.'}},{text:'Call IT, live, on speaker.',o:{e:-5,s:20,m:-15,x:5,story:'Called IT live, on speaker, in front of everyone.'}},{text:'Take a breath. Gracefully reschedule.',o:{e:-5,s:10,m:5,x:6,story:'Handled a catastrophic laptop failure with unexpected composure.'}}]},
+  {id:'reorg',type:'Company News',icon:'🔄',title:'Leadership just announced a reorg.',desc:'"We\'re restructuring to better serve our customers." Your reporting line is changing. Again.',choices:[{text:'Embrace it. Change is part of growth!',o:{m:5,s:5,x:8,story:'Survived another reorg with suspicious enthusiasm.'}},{text:'Immediately refresh your LinkedIn.',o:{m:-10,s:15,x:3,story:'Updated LinkedIn within 5 minutes of the reorg announcement.'}},{text:'Schedule a 1:1 with your new manager.',o:{m:10,s:5,e:-5,x:10,story:'Proactively built a relationship with the new manager post-reorg.'}}]},
+  {id:'training',type:'Compliance',icon:'📋',title:'Mandatory compliance training is due today.',desc:'47 modules. The progress bar moves at half speed. There is a quiz.',choices:[{text:'Do it properly. You care about this.',o:{e:-20,m:-5,s:10,x:6,story:'Completed all 47 compliance modules with genuine attention.'}},{text:'Click through at maximum speed.',o:{e:-5,m:5,s:-5,x:2,story:'Clicked through compliance training in record time.'}},{text:'Ask a coworker to share the quiz answers.',o:{m:10,s:-5,x:1,story:'Survived compliance training via the buddy system.'}}]},
+  {id:'slack',type:'Outage',icon:'📴',title:'Slack is down. For everyone.',desc:'The little red X appeared. There is no ETR. People are sending emails.',choices:[{text:'Lean into it. Deep focus mode activated.',o:{e:10,m:15,s:-15,x:3,story:'Had the most productive afternoon of the year during the Slack outage.'}},{text:'Refresh the status page every 30 seconds.',o:{e:-5,m:-5,s:10,x:1,story:'Refreshed status.slack.com 94 times during the outage.'}},{text:'Send a company email: "Slack is down btw"',o:{m:5,s:-5,x:4,story:'Sent a company-wide email to announce Slack was down. Via email.'}}]},
+  {id:'happyhour',type:'Social',icon:'🍹',title:'Office happy hour tonight.',desc:'Warm appetizers, good vibes, and someone who will definitely stay until 10pm.',choices:[{text:'Go! This is relationship-building.',o:{e:-10,m:25,s:-10,x:8,story:'Attended happy hour and called it professional development.'}},{text:'One drink, then a graceful exit.',o:{e:-5,m:15,s:-5,x:5,story:'Mastered the one-drink-and-escape happy hour strategy.'}},{text:'Skip it — you have a deliverable.',o:{e:5,m:-10,s:5,x:3,story:'Skipped happy hour to finish work. The work was not grateful.'}}]},
+  {id:'review',type:'Review Season',icon:'📊',title:'Performance review season has arrived.',desc:'Your manager wants a self-assessment in bullet points. Everything is fine.',choices:[{text:'Write something honest and thoughtful.',o:{e:-15,m:10,s:10,x:12,story:'Wrote a self-review that actually reflected the year. Brave.'}},{text:'"Exceeded expectations in all areas."',o:{e:-5,s:5,x:6,story:'Described yourself as "exceeded expectations" across the board.'}},{text:'Borrow last year\'s. Update the dates.',o:{m:-5,s:-5,x:2,story:'Recycled last year\'s self-review. The dates were mostly updated.'}}]},
+  {id:'roadmap',type:'Alignment',icon:'🗺️',title:'Engineering is pushing back on your Q3 roadmap.',desc:'"We don\'t have capacity." One Slack thread. Forty unread replies.',careers:['pm'],choices:[{text:'Push back. The roadmap is the roadmap.',o:{e:-10,m:-5,s:20,x:6,story:'Defended the roadmap against engineering. Twice.'}},{text:'Negotiate. Find a middle path.',o:{e:-10,m:10,s:5,x:10,story:'Negotiated a roadmap compromise that everyone only partially hated.'}},{text:'Accept the feedback and replan together.',o:{e:-15,m:5,s:5,x:12,story:'Rewrote the entire roadmap with engineering. Week gone.'}}]},
+  {id:'prod',type:'Incident',icon:'🔥',title:'Production needs some urgent attention.',desc:'PagerDuty fired. The status page is red. The Slack thread has 200 messages.',careers:['eng'],choices:[{text:'Roll up your sleeves and dig in.',o:{e:-25,s:30,m:-5,x:15,story:'Led incident response and restored prod in under 40 minutes.'}},{text:'Escalate to senior engineers first.',o:{e:-10,s:15,m:-5,x:8,story:'Escalated the on-call incident. It was the right call.'}},{text:'Start the postmortem doc immediately.',o:{e:-15,s:20,x:10,story:'Started the postmortem before the incident was even resolved.'}}]},
+  {id:'figma',type:'Crisis',icon:'🎨',title:'Figma crashed. Two hours of work, gone.',desc:'The browser tab just closed. Auto-save was a lie.',careers:['design'],choices:[{text:'Rebuild from memory. You\'re faster now.',o:{e:-20,m:-5,s:20,x:8,story:'Rebuilt 2 hours of Figma work from memory. It was actually better.'}},{text:'Dig through version history.',o:{e:-10,m:5,s:15,x:6,story:'Recovered most of the work from a 47-minute-old autosave.'}},{text:'Take a walk and come back fresh.',o:{e:5,m:5,s:-10,x:5,story:'Walked away from the Figma crash. The second version was better.'}}]},
+  {id:'makeit',type:'Feedback',icon:'👀',title:'"Can you just make it pop more?"',desc:'Stakeholder feedback on your 3-week project. No further context provided.',careers:['design'],choices:[{text:'Ask clarifying questions. Get specifics.',o:{e:-10,s:10,m:5,x:10,story:'Turned "make it pop" into 12 specific feedback items.'}},{text:'"Great feedback!" (Make no changes.)',o:{m:10,s:-5,x:4,story:'"Great feedback." Made no changes. Nobody noticed.'}},{text:'Total rethink. Start fresh.',o:{e:-25,m:-10,s:25,x:12,story:'Interpreted "make it pop" as permission to redesign everything.'}}]},
+  {id:'broken',type:'Launch Day',icon:'📣',title:'Campaign is live. The landing page is a 404.',desc:'The link in 50,000 emails goes nowhere. The emails have been sent.',careers:['mkt'],choices:[{text:'Fix the page immediately. All hands.',o:{e:-20,s:30,x:12,story:'Recovered a broken campaign launch in under 20 minutes.'}},{text:'Send a cheerful follow-up with the right link.',o:{e:-10,s:15,m:5,x:8,story:'Sent an "Oops! Here\'s the right link" email. Open rates were great.'}},{text:'Launch anyway. Some people will find it.',o:{s:10,m:-10,x:3,story:'Launched a broken campaign and hoped for the best.'}}]},
+  {id:'deal',type:'Negotiation',icon:'🤝',title:'Big deal on the line. Client wants 40% off.',desc:'"We\'re talking to three other vendors." Quota ends Friday.',careers:['sales'],choices:[{text:'Approve the discount. Close the deal.',o:{m:10,s:5,x:8,sal:200,story:'Closed the deal at 40% discount. Quota achieved. Questions later.'}},{text:'Counter at 20%. Hold the line.',o:{e:-10,m:5,s:15,x:12,sal:100,story:'Negotiated 20% off. Won the deal and self-respect.'}},{text:'Walk away. This isn\'t the right fit.',o:{m:15,s:5,x:10,story:'Walked away from a bad deal. Your manager will have questions.'}}]},
+  {id:'complaint',type:'People Matter',icon:'📩',title:'An employee concern just landed in your inbox.',desc:'Marked important. Two people involved. Both in back-to-back meetings.',careers:['hr'],choices:[{text:'Investigate today. Schedule calls now.',o:{e:-20,s:20,m:10,x:12,story:'Investigated and addressed the concern within 24 hours.'}},{text:'Acknowledge receipt and set a clear timeline.',o:{e:-5,s:10,x:7,story:'Responded promptly and set clear expectations.'}},{text:'Loop in legal before acting.',o:{e:-10,s:5,x:10,story:'Consulted legal first. The right call.'}}]}
+];
+
+const SHOP=[{id:'plant',name:'Fiddle Leaf Fig',emoji:'🌿',desc:'A lush upgrade for your office plant.',price:150,bonus:'+5 Morale each day'},{id:'keyboard',name:'Mechanical Keyboard',emoji:'⌨️',desc:'Clicky. Satisfying. Coworkers have opinions.',price:200,bonus:'+5 Energy each day'},{id:'desk',name:'Standing Desk',emoji:'🪑',desc:'You\'ll use it twice. It looks great.',price:350,bonus:'-5 Stress each day'},{id:'award',name:'Employee of the Month',emoji:'🏆',desc:'Framed. Mounted. Earned.',price:100,bonus:'+3 XP each day'},{id:'espresso',name:'Espresso Machine',emoji:'☕',desc:'No more breakroom coffee. You\'ve arrived.',price:280,bonus:'Coffee action is always free'},{id:'wb',name:'Whiteboard',emoji:'📋',desc:'For big thoughts and ambitious diagrams.',price:120,bonus:'+4 XP from meetings'}];
+
+let S={name:'',career:'pm',look:0,day:1,e:80,m:70,s:20,h:60,xp:0,level:0,salary:0,cw:{coffee:0,meet:0,expert:0,new:0},deco:[],todayStories:[],allStories:[],usedPre:{coffee:false,lunch:false,chat:false},wdEvents:[],wdIdx:0,schedTpl:0,notifs:['Welcome to your first day! ☀️'],started:false,todayXp:0,gameHour:9,messages:{coffee:[],meet:[],expert:[],new:[]},speed:1};
+let _autoTimer=null,_autoBarTimer=null,_activeCwChat=null;
+
+function save(){localStorage.setItem('ol4',JSON.stringify(S));}
+function load(){const d=localStorage.getItem('ol4');if(d){S=JSON.parse(d);S.messages=S.messages||{coffee:[],meet:[],expert:[],new:[]};S.speed=S.speed||1;S.gameHour=S.gameHour||9;return true;}return false;}
+
+// ── Messaging system ─────────────────────────────────────────────
+const CW_ORDER=[
+  {key:'coffee',day:1,role:'Your coffee buddy'},
+  {key:'meet',  day:3,role:'Calendar enthusiast'},
+  {key:'expert',day:5,role:'The quiet genius'},
+  {key:'new',   day:7,role:'The eager new hire'},
+];
+const CW_CAT_IDX={coffee:1,meet:2,expert:3,new:4};
+
+function openMessages(){
+  if(document.getElementById('screen-home').style.display==='none')return;
+  const modal=document.getElementById('messages-modal');
+  modal.style.display='flex';
+  _activeCwChat=null;
+  renderMsgSidebar();
+  document.getElementById('msg-thread').innerHTML='<div style="color:var(--text3);font-size:11px;margin:auto;">Select a coworker to start chatting ☕</div>';
+  document.getElementById('msg-options').innerHTML='';
+  document.getElementById('msg-cw-header').textContent='Select a coworker';
+}
+
+function closeMessages(){
+  document.getElementById('messages-modal').style.display='none';
+}
+
+function renderMsgSidebar(){
+  const el=document.getElementById('msg-sidebar');el.innerHTML='';
+  CW_ORDER.forEach(({key,day,role})=>{
+    const unlocked=S.day>=day;
+    const catIdx=CW_CAT_IDX[key];
+    const data=CW_CHATS[key];
+    const btn=document.createElement('button');
+    btn.className='msg-cw-btn'+(key===_activeCwChat?' active':'');
+    btn.disabled=!unlocked;
+    btn.style.opacity=unlocked?'1':'0.4';
+    btn.onclick=unlocked?()=>switchCwChat(key):null;
+
+    const mini=document.createElement('canvas');
+    drawCat(mini,catIdx,30);mini.style.borderRadius='50%';mini.style.border='2px solid var(--border)';mini.style.flexShrink='0';
+    const info=document.createElement('div');
+    info.innerHTML=`<div class="msg-cw-name">${data.name}</div><div class="msg-cw-role">${unlocked?role:'Day '+day}</div>`;
+    btn.appendChild(mini);btn.appendChild(info);
+
+    const msgs=S.messages[key]||[];
+    if(msgs.length>0&&key!==_activeCwChat){
+      const dot=document.createElement('div');dot.className='msg-unread';btn.appendChild(dot);
+    }
+    el.appendChild(btn);
+  });
+}
+
+function switchCwChat(key){
+  _activeCwChat=key;
+  renderMsgSidebar();
+  const data=CW_CHATS[key];
+  document.getElementById('msg-cw-header').textContent=data.name+' · '+CW_ORDER.find(c=>c.key===key).role;
+  const thread=document.getElementById('msg-thread');thread.innerHTML='';
+
+  // Show greeting if no messages yet
+  const msgs=S.messages[key]||[];
+  if(msgs.length===0){
+    const greet=data.greeting[Math.floor(Math.random()*data.greeting.length)];
+    S.messages[key]=[{from:'them',text:greet}];save();
+  }
+  S.messages[key].forEach(m=>appendBubble(thread,m.from,m.text));
+  thread.scrollTop=thread.scrollHeight;
+  renderMsgOptions(key);
+}
+
+function appendBubble(thread,from,text,typing=false){
+  const d=document.createElement('div');
+  d.className='msg-bubble '+(typing?'typing':from==='me'?'me':'them');
+  d.textContent=text;
+  thread.appendChild(d);
+  thread.scrollTop=thread.scrollHeight;
+  return d;
+}
+
+function renderMsgOptions(key){
+  const data=CW_CHATS[key];
+  const opts=document.getElementById('msg-options');opts.innerHTML='';
+  // Show up to 4 random topics, shuffled each open
+  const pool=[...data.topics].sort(()=>Math.random()-0.5).slice(0,4);
+  pool.forEach(topic=>{
+    const b=document.createElement('button');b.className='msg-opt-btn';
+    b.textContent='→ '+topic.q;
+    b.onclick=()=>sendMsg(key,topic);
+    opts.appendChild(b);
+  });
+}
+
+function sendMsg(key,topic){
+  const thread=document.getElementById('msg-thread');
+  const data=CW_CHATS[key];
+  S.messages[key].push({from:'me',text:topic.q});
+  appendBubble(thread,'me',topic.q);
+  document.getElementById('msg-options').innerHTML='<div style="color:var(--text3);font-size:10px;font-style:italic;">...</div>';
+  save();
+  setTimeout(()=>{
+    const typing=appendBubble(thread,'them','✦ typing...',true);
+    thread.scrollTop=thread.scrollHeight;
+    setTimeout(()=>{
+      typing.remove();
+      S.messages[key].push({from:'them',text:topic.a});
+      appendBubble(thread,'them',topic.a);
+      save();
+      renderMsgOptions(key);
+    },900+Math.random()*600);
+  },400);
+}
+function clamp(v,lo=0,hi=100){return Math.max(lo,Math.min(hi,v));}
+function fmtHour(h){const hh=Math.floor(h);const m=h%1>=0.5?'30':'00';const ampm=hh>=12?'PM':'AM';return `${hh>12?hh-12:hh||12}:${m} ${ampm}`;}
+function updateClock(){const el=document.getElementById('tb-clock');if(el)el.textContent=fmtHour(S.gameHour);}
+function clearAutoTimer(){if(_autoTimer)clearTimeout(_autoTimer);if(_autoBarTimer)clearInterval(_autoBarTimer);_autoTimer=null;_autoBarTimer=null;}
+
+function go(name){
+  document.querySelectorAll('.screen').forEach(el=>el.classList.remove('active'));
+  const el=document.getElementById('screen-'+name);
+  if(el)el.classList.add('active');
+  if(name==='home')refreshHome();
+  if(name==='shop')refreshShop();
+}
+
+function initCreate(){
+  const cg=document.getElementById('career-grid');
+  cg.innerHTML='';
+  Object.entries(CAREERS).forEach(([id,c])=>{
+    const d=document.createElement('div');
+    d.className='career-opt'+(id==='pm'?' sel':'');
+    d.innerHTML=`<div class="cn">${c.emoji} ${c.name}</div><div class="cd">${c.desc}</div>`;
+    d.onclick=()=>{document.querySelectorAll('.career-opt').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');S.career=id;};
+    cg.appendChild(d);
+  });
+
+  const lg=document.getElementById('cat-grid');
+  lg.innerHTML='';
+  CATS.forEach((cat,i)=>{
+    const d=document.createElement('div');
+    d.className='cat-opt'+(i===0?' sel':'');
+    const cv=document.createElement('canvas');
+    d.appendChild(cv);
+    drawCat(cv,i,52);
+    const lbl=document.createElement('div');
+    lbl.className='cat-opt-name';lbl.textContent=cat.name;
+    d.appendChild(lbl);
+    d.onclick=()=>{document.querySelectorAll('.cat-opt').forEach(x=>x.classList.remove('sel'));d.classList.add('sel');S.look=i;};
+    lg.appendChild(d);
+  });
+
+  document.getElementById('btn-begin').onclick=()=>{
+    const n=document.getElementById('inp-name').value.trim();
+    if(!n){alert('What should we call you?');return;}
+    S.name=n;S.started=true;save();refreshHome();go('home');
+  };
+}
+
+function renderOfficeCat(containerId){
+  const el=document.getElementById(containerId);
+  if(!el)return;
+  el.innerHTML='';
+  const cv=document.createElement('canvas');
+  el.appendChild(cv);
+  drawOfficeCat(cv,S.look,52);
+}
+
+function renderPlant(upgraded){
+  if(!upgraded){
+    return `<div style="position:relative;width:24px">
+      <div style="width:20px;height:14px;background:#A0C880;border-radius:50% 50% 20% 20%;margin:0 auto;border:2px solid #78A858;position:relative">
+        <div style="position:absolute;top:2px;left:3px;width:5px;height:7px;background:#C0E898;border-radius:50%;transform:rotate(-15deg)"></div>
+        <div style="position:absolute;top:2px;right:3px;width:5px;height:7px;background:#C0E898;border-radius:50%;transform:rotate(15deg)"></div>
+      </div>
+      <div style="width:14px;height:10px;background:#F0E0C8;border-radius:0 0 4px 4px;border:2px solid #D8C0A0;margin:0 auto;margin-top:-1px"></div>
+    </div>`;
+  }
+  return `<div style="position:relative;width:32px;height:54px">
+    <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);width:3px;height:34px;background:#68A848;border-radius:2px"></div>
+    <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:28px;height:20px;background:#78C058;border-radius:50%;border:2px solid #58A038"></div>
+    <div style="position:absolute;top:12px;left:-2px;width:22px;height:14px;background:#88D068;border-radius:50%;transform:rotate(-25deg);border:2px solid #58A038"></div>
+    <div style="position:absolute;top:16px;right:-2px;width:22px;height:14px;background:#98E078;border-radius:50%;transform:rotate(25deg);border:2px solid #58A038"></div>
+    <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:18px;height:12px;background:#F0E0C8;border-radius:0 0 4px 4px;border:2px solid #D8C0A0"></div>
+  </div>`;
+}
+
+function refreshHome(){
+  const dayName=DAYS[(S.day-1)%DAYS.length];
+  document.getElementById('tb-day').textContent='Day '+S.day+' · '+dayName;
+  document.getElementById('tb-money').textContent='$'+S.salary.toLocaleString();
+  document.getElementById('tb-level').textContent=TITLES[S.level];
+  document.getElementById('hp-name').textContent=S.name;
+  document.getElementById('hp-career').textContent=CAREERS[S.career].name;
+  document.getElementById('hp-title').textContent=TITLES[S.level];
+  document.getElementById('cal-hdr').textContent=dayName;
+  document.getElementById('cal-sub').textContent='Day '+S.day;
+  [['e','bar-e','val-e'],['m','bar-m','val-m'],['s','bar-s','val-s'],['h','bar-h','val-h']].forEach(([k,b,v])=>{
+    document.getElementById(b).style.width=S[k]+'%';
+    document.getElementById(v).textContent=Math.round(S[k]);
+  });
+  const xpIn=S.xp%XP_PER;
+  document.getElementById('bar-promo').style.width=(xpIn/XP_PER*100)+'%';
+  document.getElementById('promo-xp').textContent=xpIn+' / '+XP_PER+' XP toward '+TITLES[Math.min(S.level+1,TITLES.length-1)];
+  updateClock();
+
+  // Coworkers list with mini cat avatars
+  const cwEl=document.getElementById('cw-list');
+  cwEl.innerHTML='';
+  COWORKERS.filter(c=>S.day>=c.day).forEach(c=>{
+    const rel=S.cw[c.id]||0;
+    const hearts=rel>=5?'♥♥♥':rel>=3?'♥♥':rel>=1?'♥':'○';
+    const d=document.createElement('div');
+    d.className='cw-item';
+    const badge=document.createElement('div');badge.className='cw-badge';
+    const cv=document.createElement('canvas');drawCat(cv,c.catIdx,26);
+    badge.appendChild(cv);
+    d.appendChild(badge);
+    const info=document.createElement('div');
+    info.innerHTML=`<div class="cw-name">${c.name}${rel>=5?' ⭐':''}</div><div class="cw-role">${c.role}</div>`;
+    d.appendChild(info);
+    const h=document.createElement('div');h.className='cw-hearts';h.textContent=hearts;
+    d.appendChild(h);
+    cwEl.appendChild(d);
+  });
+
+  const tmpl=SCHEDULES[S.schedTpl%SCHEDULES.length];
+  const sl=document.getElementById('sched-list');sl.innerHTML='';
+  tmpl.forEach(item=>{const d=document.createElement('div');d.className='sched-item';d.innerHTML=`<span class="sched-time">${item.t}</span><span class="sched-name">${item.n}</span>`;sl.appendChild(d);});
+  const nl=document.getElementById('notif-list');nl.innerHTML='';
+  S.notifs.slice(-4).reverse().forEach((n,i)=>{const d=document.createElement('div');d.className='notif-item'+(i===0?' new':'');d.textContent=n;nl.appendChild(d);});
+
+  drawOfficeScene();
+  ['coffee','lunch','chat'].forEach(a=>{const b=document.getElementById('abtn-'+a);if(b)b.disabled=S.usedPre[a];});
+}
+
+function showNotif(txt){
+  const sn=document.getElementById('scene-notif');
+  sn.textContent=txt;sn.classList.add('on');
+  setTimeout(()=>{sn.classList.remove('on');},2800);
+}
+function addNotif(txt){S.notifs.push(txt);if(S.notifs.length>8)S.notifs.shift();}
+
+function preAct(type){
+  if(S.usedPre[type])return;
+  S.usedPre[type]=true;
+  if(type==='coffee'){
+    const free=S.deco.includes('espresso');
+    S.e=clamp(S.e+18);S.s=clamp(S.s-8);S.m=clamp(S.m+8);
+    const q=['"First coffee of the day. Finally."','"Fueled by caffeine & ambition."','"Not a morning cat — yet here we are."','"Coffee first. Then world domination."'];
+    showNotif('☕ '+q[Math.floor(Math.random()*q.length)]);
+    addNotif('Grabbed morning coffee ☕'+(free?' (free!)':''));
+  }else if(type==='lunch'){
+    S.h=clamp(S.h+35);S.e=clamp(S.e+10);S.m=clamp(S.m+8);
+    const q=['"Eating lunch at my desk. Again."','"Is it 5pm yet?"','"Tuna sandwich. Predictable. Perfect."','"Lunch hour is sacred."'];
+    showNotif('🥗 '+q[Math.floor(Math.random()*q.length)]);
+    addNotif('Had lunch 🥗');
+  }else if(type==='chat'){
+    const avail=COWORKERS.filter(c=>S.day>=c.day);
+    if(!avail.length){S.usedPre.chat=false;return;}
+    const cw=avail[Math.floor(Math.random()*avail.length)];
+    S.cw[cw.id]=Math.min(5,(S.cw[cw.id]||0)+1);
+    S.m=clamp(S.m+12);S.s=clamp(S.s-8);
+    const q=[`${cw.name} showed you a cat meme. Morale restored.`,`${cw.name} saved you a snack from the kitchen.`,`${cw.name} let you vent for 10 minutes. You feel heard.`];
+    showNotif('💬 '+q[Math.floor(Math.random()*q.length)]);
+    addNotif('Chatted with '+cw.name+' 💬');
+    if(S.cw[cw.id]>=5)addNotif(cw.name+' is your Work Bestie ⭐');
+  }
+  save();refreshHome();
+}
+
+function setSpeed(v){
+  S.speed=v;
+  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  const id=v==='auto'?'spd-auto':'spd-'+v;
+  const el=document.getElementById(id);if(el)el.classList.add('active');
+  if(v!=='auto'){clearAutoTimer();document.getElementById('auto-bar-wrap').style.display='none';}
+  else scheduleAutoAdvance();
+}
+
+function scheduleAutoAdvance(){
+  clearAutoTimer();
+  if(S.speed!=='auto')return;
+  const wrap=document.getElementById('auto-bar-wrap');
+  const bar=document.getElementById('auto-bar');
+  if(!wrap||!bar)return;
+  // Only show bar when on a choice (evcard visible)
+  const evcard=document.getElementById('evcard');
+  if(!evcard||evcard.style.display==='none')return;
+  wrap.style.display='block';bar.style.width='0%';
+  const dur=2200,step=50;let elapsed=0;
+  _autoBarTimer=setInterval(()=>{elapsed+=step;bar.style.width=(elapsed/dur*100)+'%';if(elapsed>=dur)clearInterval(_autoBarTimer);},step);
+  _autoTimer=setTimeout(()=>{
+    if(S.speed!=='auto')return;
+    const ev=S.wdEvents[S.wdIdx];if(!ev)return;
+    const choice=ev.choices[Math.floor(Math.random()*ev.choices.length)];
+    wrap.style.display='none';
+    choose(ev,choice);
+  },dur);
+}
+
+function startWorkday(){
+  S.todayStories=[];S.todayXp=0;S.gameHour=9;
+  S.h=clamp(S.h-10);S.e=clamp(S.e-5);
+  const univ=EVENTS.filter(ev=>!ev.careers);
+  const spec=EVENTS.filter(ev=>ev.careers&&ev.careers.includes(S.career));
+  S.wdEvents=[...spec,...univ].sort(()=>Math.random()-.5).slice(0,4);
+  S.wdIdx=0;
+  go('workday');renderEv();
+}
+
+function renderEv(){
+  if(S.wdIdx>=S.wdEvents.length){endDay();return;}
+  const ev=S.wdEvents[S.wdIdx];
+  document.getElementById('wd-day').textContent='Day '+S.day;
+  document.getElementById('wd-type').textContent=ev.title;
+  document.getElementById('ec-icon').textContent=ev.icon;
+  document.getElementById('ec-type').textContent=ev.type;
+  document.getElementById('ec-title').textContent=ev.title;
+  document.getElementById('ec-desc').textContent=ev.desc;
+  const clockEl=document.getElementById('wd-clock');if(clockEl)clockEl.textContent=fmtHour(S.gameHour);
+  const ch=document.getElementById('ec-choices');ch.innerHTML='';
+  ev.choices.forEach(c=>{const b=document.createElement('button');b.className='choice-btn';b.textContent=c.text;b.onclick=()=>{clearAutoTimer();document.getElementById('auto-bar-wrap').style.display='none';choose(ev,c);};ch.appendChild(b);});
+  const dots=document.getElementById('prog-dots');dots.innerHTML='';
+  S.wdEvents.forEach((_,i)=>{const d=document.createElement('div');d.className='pdot'+(i<S.wdIdx?' done':i===S.wdIdx?' cur':'');dots.appendChild(d);});
+  document.getElementById('evcard').style.display='block';
+  document.getElementById('outcome-box').classList.remove('on');
+  const c=document.getElementById('evcard');c.classList.remove('fade');void c.offsetWidth;c.classList.add('fade');
+  // restore speed button state
+  document.querySelectorAll('.speed-btn').forEach(b=>b.classList.remove('active'));
+  const sid=S.speed==='auto'?'spd-auto':'spd-'+S.speed;
+  const sel=document.getElementById(sid);if(sel)sel.classList.add('active');
+  if(S.speed==='auto')scheduleAutoAdvance();
+}
+
+function choose(ev,choice){
+  const o=choice.o;
+  if(o.e)S.e=clamp(S.e+o.e);
+  if(o.m)S.m=clamp(S.m+o.m);
+  if(o.s)S.s=clamp(S.s+o.s);
+  if(o.h)S.h=clamp(S.h+o.h);
+  if(o.x){let xp=o.x;if(S.deco.includes('wb'))xp+=4;if(S.deco.includes('award'))xp+=2;S.xp+=xp;S.todayXp+=xp;}
+  if(o.sal)S.salary+=o.sal;
+  if(o.story){S.todayStories.push(o.story);S.allStories.push('Day '+S.day+': '+o.story);}
+  document.getElementById('out-title').textContent='"'+choice.text+'"';
+  const dd=document.getElementById('out-deltas');dd.innerHTML='';
+  [{k:'e',l:'Energy',v:o.e},{k:'m',l:'Morale',v:o.m},{k:'s',l:'Stress',v:o.s},{k:'h',l:'Hunger',v:o.h},{k:'x',l:'XP',v:o.x}].filter(f=>f.v).forEach(f=>{
+    const sp=document.createElement('span');const pos=f.k==='s'?f.v<0:f.v>0;sp.className='delta '+(pos?'dpos':'dneg');sp.textContent=(f.v>0?'+':'')+f.v+' '+f.l;dd.appendChild(sp);
+  });
+  document.getElementById('out-story').textContent=o.story||'';
+  // Advance in-game clock (4 events span 9am-5pm = 2 hrs each)
+  S.gameHour=Math.min(S.gameHour+2,17);
+  const clockEl=document.getElementById('wd-clock');if(clockEl)clockEl.textContent=fmtHour(S.gameHour);
+  document.getElementById('evcard').style.display='none';
+  document.getElementById('outcome-box').classList.add('on');
+  S.wdIdx++;save();
+  // Auto-advance outcome box if speed>1
+  if(S.speed===2){clearAutoTimer();_autoTimer=setTimeout(()=>nextEv(),1800);}
+  else if(S.speed==='auto'){clearAutoTimer();_autoTimer=setTimeout(()=>nextEv(),900);}
+}
+
+function nextEv(){
+  clearAutoTimer();
+  document.getElementById('auto-bar-wrap').style.display='none';
+  renderEv();
+}
+
+function endDay(){
+  S.h=clamp(S.h-15);S.e=clamp(S.e-10);S.s=clamp(S.s+5);
+  const daySal=CAREERS[S.career].sal;S.salary+=daySal;
+  if(S.deco.includes('plant'))S.m=clamp(S.m+3);
+  if(S.deco.includes('keyboard'))S.e=clamp(S.e+3);
+  if(S.deco.includes('desk'))S.s=clamp(S.s-3);
+  if(S.deco.includes('award'))S.xp+=2;
+  const newLv=Math.min(Math.floor(S.xp/XP_PER),TITLES.length-1);
+  const promoted=newLv>S.level;S.level=newLv;
+  document.getElementById('eod-lbl').textContent='Day '+S.day+' complete ✨';
+  document.getElementById('eod-sal').textContent='+$'+daySal;
+  document.getElementById('eod-xp').textContent='+'+S.todayXp+' XP';
+  document.getElementById('eod-tot').textContent='$'+S.salary.toLocaleString();
+  document.getElementById('eod-lvl').textContent=TITLES[S.level];
+  document.getElementById('eod-next').textContent=S.day+1;
+  const sto=document.getElementById('eod-stories');
+  sto.innerHTML=S.todayStories.length?S.todayStories.map(x=>'→ '+x).join('<br>'):'';
+  sto.style.display=S.todayStories.length?'block':'none';
+  const promo=document.getElementById('eod-promo');
+  if(promoted){promo.classList.add('on');document.getElementById('eod-promo-t').textContent='🎉 Promoted!';document.getElementById('eod-promo-s').textContent='You are now '+TITLES[S.level]+'. Well deserved.';addNotif('Promoted to '+TITLES[S.level]+'! 🎉');}
+  else promo.classList.remove('on');
+  save();go('eod');
+}
+
+function nextDay(){
+  S.gameHour=9;S.speed=1;clearAutoTimer();
+  S.day++;S.usedPre={coffee:false,lunch:false,chat:false};S.schedTpl++;
+  S.e=clamp(S.e+30);S.h=clamp(S.h+20);S.s=clamp(S.s-15);
+  addNotif('Good morning! Day '+S.day+' ☀️');
+  save();go('home');
+}
+
+function refreshShop(){
+  document.getElementById('shop-bal').textContent='$'+S.salary.toLocaleString();
+  const g=document.getElementById('shop-grid');g.innerHTML='';
+  SHOP.forEach(d=>{
+    const owned=S.deco.includes(d.id);const can=S.salary>=d.price;
+    const el=document.createElement('div');
+    el.className='shop-item card'+(owned?' owned':'');
+    el.innerHTML=`<div class="si-icon">${d.emoji}</div><div class="si-name">${d.name}</div><div class="si-desc">${d.desc}</div><div class="si-price">${owned?'✓ In your office':'$'+d.price}</div><div class="si-bonus">${d.bonus}</div>${!owned?`<button class="btn-buy"${!can?' disabled style="opacity:.4;cursor:default"':''} onclick="buy('${d.id}')">Add to office</button>`:''}`;
+    g.appendChild(el);
+  });
+}
+
+function buy(id){
+  const d=SHOP.find(x=>x.id===id);
+  if(!d||S.deco.includes(id)||S.salary<d.price)return;
+  S.salary-=d.price;S.deco.push(id);
+  addNotif('Added '+d.name+' to your office! '+d.emoji);
+  save();refreshShop();
+}
+
+function drawOfficeScene(){
+  const canvas=document.getElementById('office-canvas');
+  if(!canvas)return;
+  const rect=canvas.getBoundingClientRect();
+  if(!rect.width||!rect.height){setTimeout(drawOfficeScene,60);return;}
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=Math.round(rect.width*dpr);
+  canvas.height=Math.round(rect.height*dpr);
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+  const W=rect.width,H=rect.height;
+  ctx.lineCap='round';ctx.lineJoin='round';
+  const cat=CATS[S.look]||CATS[0];
+  const OL='#C89098';
+
+  // Background
+  ctx.fillStyle='#FBF7F5';ctx.fillRect(0,0,W,H);
+
+  // Large circle backdrop
+  const cx=W*0.5,cy=H*0.44,R=Math.min(W*0.46,H*0.9);
+  ctx.save();
+  ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);
+  ctx.fillStyle='#FDEAE6';ctx.fill();
+  ctx.strokeStyle='#E0B0B8';ctx.lineWidth=2;ctx.stroke();
+  ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.clip();
+
+  // Floor (lower half of circle)
+  ctx.fillStyle='#FEF0E8';
+  ctx.fillRect(cx-R,cy-R*0.05,R*2,R*1.1);
+
+  // Rug — diamond shape
+  const rcx=cx+W*0.02,rcy=H*0.76,rw=W*0.38,rh=H*0.2;
+  ctx.fillStyle='#F5C0C0';
+  ctx.beginPath();ctx.moveTo(rcx,rcy-rh/2);ctx.lineTo(rcx+rw/2,rcy);ctx.lineTo(rcx,rcy+rh/2);ctx.lineTo(rcx-rw/2,rcy);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.8;ctx.stroke();
+  const rb=0.1;
+  ctx.strokeStyle='#EAA8A8';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(rcx,rcy-rh*(0.5-rb));ctx.lineTo(rcx+rw*(0.5-rb),rcy);ctx.lineTo(rcx,rcy+rh*(0.5-rb));ctx.lineTo(rcx-rw*(0.5-rb),rcy);ctx.closePath();ctx.stroke();
+
+  // ── WINDOW ──
+  const wx=cx-R*0.8,wy=cy-R*0.88,ww=R*0.6,wh=R*0.72;
+  // Curtain rod
+  ctx.fillStyle='#E8C8B0';
+  ctx.beginPath();ctx.roundRect(wx-ww*0.22,wy-10,ww*1.44,7,3);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+  // Left curtain
+  ctx.fillStyle='#F5B0C0';
+  ctx.beginPath();ctx.moveTo(wx-ww*0.18,wy-4);ctx.bezierCurveTo(wx-ww*0.38,wy+wh*0.25,wx-ww*0.28,wy+wh*0.62,wx-ww*0.08,wy+wh+4);ctx.lineTo(wx,wy+wh+4);ctx.lineTo(wx,wy-4);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+  // Right curtain
+  ctx.fillStyle='#F5B0C0';
+  ctx.beginPath();ctx.moveTo(wx+ww+ww*0.18,wy-4);ctx.bezierCurveTo(wx+ww+ww*0.38,wy+wh*0.25,wx+ww+ww*0.28,wy+wh*0.62,wx+ww+ww*0.08,wy+wh+4);ctx.lineTo(wx+ww,wy+wh+4);ctx.lineTo(wx+ww,wy-4);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+  // Curtain ties
+  [[wx-4,wy+wh*0.58],[wx+ww+4,wy+wh*0.58]].forEach(([tx,ty])=>{
+    ctx.fillStyle='#E89098';ctx.beginPath();ctx.ellipse(tx,ty,8,10,0.15,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=OL;ctx.lineWidth=1.4;ctx.stroke();
+  });
+  // Window glass
+  ctx.fillStyle='#EEF8FF';
+  ctx.beginPath();ctx.roundRect(wx,wy,ww,wh,3);ctx.fill();
+  // Clouds
+  ctx.fillStyle='rgba(255,255,255,0.82)';
+  [[ww*0.2,wh*0.14,13,6],[ww*0.5,wh*0.08,10,5],[ww*0.15,wh*0.3,8,4]].forEach(([dx,dy,rx,ry])=>{
+    ctx.beginPath();ctx.ellipse(wx+dx,wy+dy,rx,ry,0,0,Math.PI*2);ctx.fill();
+  });
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(wx,wy,ww,wh,3);ctx.stroke();
+  // Pane dividers
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(wx+ww/2,wy);ctx.lineTo(wx+ww/2,wy+wh);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(wx,wy+wh*0.5);ctx.lineTo(wx+ww,wy+wh*0.5);ctx.stroke();
+  // Sill
+  ctx.fillStyle='#FFF0D8';ctx.strokeStyle=OL;ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(wx-5,wy+wh-2,ww+10,9,2);ctx.fill();ctx.stroke();
+
+  // ── CLOCK ──
+  const clkx=cx+W*0.05,clky=cy-R*0.8,clkr=R*0.13;
+  ctx.fillStyle='#FEF5D8';ctx.beginPath();ctx.arc(clkx,clky,clkr,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.strokeStyle='#E8D8A0';ctx.lineWidth=1;ctx.beginPath();ctx.arc(clkx,clky,clkr*0.84,0,Math.PI*2);ctx.stroke();
+  // Draw clock hands based on S.gameHour
+  const hAngle=((S.gameHour%12)/12)*Math.PI*2-Math.PI/2;
+  const mAngle=((S.gameHour%1)*60/60)*Math.PI*2-Math.PI/2;
+  ctx.strokeStyle=OL;ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(clkx,clky);ctx.lineTo(clkx+Math.cos(hAngle)*clkr*0.55,clky+Math.sin(hAngle)*clkr*0.55);ctx.stroke();
+  ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(clkx,clky);ctx.lineTo(clkx+Math.cos(mAngle)*clkr*0.72,clky+Math.sin(mAngle)*clkr*0.72);ctx.stroke();
+  ctx.fillStyle=OL;ctx.beginPath();ctx.arc(clkx,clky,2.2,0,Math.PI*2);ctx.fill();
+
+  // ── PICTURE FRAME ──
+  const frx=cx+R*0.52,fry=cy-R*0.88,frw=R*0.32,frh=R*0.3;
+  ctx.fillStyle='#F5B8C0';ctx.beginPath();ctx.roundRect(frx,fry,frw,frh,4);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#FEF0E8';ctx.beginPath();ctx.roundRect(frx+5,fry+5,frw-10,frh-10,2);ctx.fill();
+  ctx.fillStyle='#F8D870';ctx.beginPath();ctx.arc(frx+9,fry+10,6,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#A8C880';
+  ctx.beginPath();ctx.ellipse(frx+frw*0.38,fry+frh-9,10,7,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(frx+frw*0.68,fry+frh-9,12,8,0,0,Math.PI*2);ctx.fill();
+
+  // ── PLANT ──
+  const plx=cx+R*0.65,ply=cy+R*0.05,potH=R*0.24,potW=R*0.22;
+  ctx.fillStyle='#FFFFFF';
+  ctx.beginPath();ctx.moveTo(plx-potW/2-3,ply);ctx.lineTo(plx+potW/2+3,ply);ctx.lineTo(plx+potW/2-3,ply+potH);ctx.lineTo(plx-potW/2+3,ply+potH);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#FFF0E0';ctx.beginPath();ctx.roundRect(plx-potW/2-4,ply-5,potW+8,8,3);ctx.fill();ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#C8A878';ctx.beginPath();ctx.roundRect(plx-potW/2+3,ply,potW-6,5,1);ctx.fill();
+  ctx.strokeStyle='#9AB870';ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(plx,ply-2);ctx.lineTo(plx,ply-potH*1.85);ctx.stroke();
+  function leaf(lx,ly,ang,sz){
+    ctx.save();ctx.translate(lx,ly);ctx.rotate(ang);
+    ctx.fillStyle='#B8D890';ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(-sz*0.44,-sz*0.28,-sz*0.44,-sz*0.74,0,-sz);ctx.bezierCurveTo(sz*0.44,-sz*0.74,sz*0.44,-sz*0.28,0,0);ctx.closePath();ctx.fill();
+    ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.strokeStyle='#7A9860';ctx.lineWidth=0.9;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-sz*0.84);ctx.stroke();
+    ctx.restore();
+  }
+  leaf(plx-9,ply-potH*0.78,-0.55,potH*0.88);leaf(plx+8,ply-potH*0.78,0.35,potH*0.76);
+  leaf(plx,ply-potH*1.2,-0.1,potH);leaf(plx+13,ply-potH*1.1,0.7,potH*0.66);
+  leaf(plx-11,ply-potH*1.2,-0.65,potH*0.72);
+
+  // ── CAT (drawn before desk so desk covers lower body) ──
+  const deskTopY=H*0.56;
+  const hR=H*0.098,hCx=cx-W*0.01,hCy=deskTopY-hR*0.5;
+
+  // Torso (visible above desk)
+  ctx.fillStyle=cat.body;ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.86,hR*0.68,hR*0.6,0,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle=cat.belly;ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.9,hR*0.36,hR*0.38,0,0,Math.PI*2);ctx.fill();
+
+  // Paws on desk surface
+  ctx.fillStyle=cat.body;
+  ctx.beginPath();ctx.ellipse(hCx-hR*0.68,deskTopY-3,hR*0.34,hR*0.2,0.18,0,Math.PI*2);ctx.fill();ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(hCx+hR*0.52,deskTopY-3,hR*0.34,hR*0.2,-0.1,0,Math.PI*2);ctx.fill();ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+
+  // Ears
+  [[hCx-hR*0.5,hCy-hR*0.82,1],[hCx+hR*0.5,hCy-hR*0.82,-1]].forEach(([ex,ey,side])=>{
+    ctx.fillStyle=cat.body;ctx.beginPath();ctx.moveTo(ex-hR*0.26,ey+hR*0.18);ctx.lineTo(ex+side*hR*0.06,ey-hR*0.46);ctx.lineTo(ex+hR*0.26,ey+hR*0.18);ctx.closePath();ctx.fill();
+    ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+    ctx.fillStyle=cat.inner;ctx.beginPath();ctx.moveTo(ex-hR*0.13,ey+hR*0.1);ctx.lineTo(ex+side*hR*0.03,ey-hR*0.26);ctx.lineTo(ex+hR*0.13,ey+hR*0.1);ctx.closePath();ctx.fill();
+  });
+
+  // Head
+  ctx.fillStyle=cat.body;ctx.beginPath();ctx.arc(hCx,hCy,hR,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2.2;ctx.stroke();
+
+  // Stripes
+  if(S.look!==3){
+    ctx.fillStyle=cat.stripe;ctx.globalAlpha=0.28;
+    [hCx-hR*0.22,hCx,hCx+hR*0.22].forEach(x=>{ctx.beginPath();ctx.roundRect(x-2,hCy-hR*0.78,4,hR*0.44,2);ctx.fill();});
+    ctx.globalAlpha=1;
+  }
+  if(S.look===4){
+    ctx.fillStyle=cat.stripe;ctx.globalAlpha=0.42;
+    ctx.beginPath();ctx.ellipse(hCx-hR*0.3,hCy-hR*0.1,hR*0.28,hR*0.22,-0.3,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#2A1A0A';ctx.globalAlpha=0.14;
+    ctx.beginPath();ctx.ellipse(hCx+hR*0.22,hCy+hR*0.1,hR*0.2,hR*0.16,0.3,0,Math.PI*2);ctx.fill();
+    ctx.globalAlpha=1;
+  }
+  // Belly on head (chin)
+  ctx.fillStyle=cat.belly;ctx.beginPath();ctx.ellipse(hCx,hCy+hR*0.26,hR*0.4,hR*0.28,0,0,Math.PI*2);ctx.fill();
+
+  // Eyes
+  const eyY=hCy-hR*0.1,eyS=hR*0.36;
+  ctx.fillStyle='#1A1008';ctx.beginPath();ctx.ellipse(hCx-eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(hCx+eyS,eyY,hR*0.12,hR*0.155,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='white';ctx.beginPath();ctx.arc(hCx-eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.arc(hCx+eyS+hR*0.055,eyY-hR*0.055,hR*0.048,0,Math.PI*2);ctx.fill();
+
+  // Nose
+  ctx.fillStyle=cat.nose;ctx.beginPath();ctx.arc(hCx,hCy+hR*0.15,hR*0.077,0,Math.PI*2);ctx.fill();
+  // Mouth
+  ctx.strokeStyle=cat.nose;ctx.lineWidth=1.4;
+  ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx-hR*0.15,hCy+hR*0.34,hCx-hR*0.2,hCy+hR*0.29);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(hCx,hCy+hR*0.23);ctx.quadraticCurveTo(hCx+hR*0.15,hCy+hR*0.34,hCx+hR*0.2,hCy+hR*0.29);ctx.stroke();
+
+  // Blush
+  ctx.fillStyle='#F0A0B8';ctx.globalAlpha=0.28;
+  ctx.beginPath();ctx.ellipse(hCx-hR*0.5,hCy+hR*0.2,hR*0.22,hR*0.12,0.3,0,Math.PI*2);ctx.fill();
+  ctx.beginPath();ctx.ellipse(hCx+hR*0.5,hCy+hR*0.2,hR*0.22,hR*0.12,-0.3,0,Math.PI*2);ctx.fill();
+  ctx.globalAlpha=1;
+
+  // Whiskers
+  ctx.strokeStyle=S.look===1?'rgba(100,100,100,0.5)':'rgba(220,210,200,0.72)';ctx.lineWidth=1;
+  [[-1,0.5],[-1,-0.5],[1,0.5],[1,-0.5]].forEach(([side,ang])=>{
+    ctx.beginPath();ctx.moveTo(hCx+side*hR*0.13,hCy+hR*0.18);ctx.lineTo(hCx+side*hR*0.72,hCy+hR*0.18+ang*hR*0.06);ctx.stroke();
+  });
+
+  // Tail curling around side
+  ctx.strokeStyle=cat.body;ctx.lineWidth=hR*0.32;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(hCx+hR*0.62,hCy+hR*1.3);ctx.quadraticCurveTo(hCx+hR*1.6,hCy+hR*1.55,hCx+hR*1.3,hCy+hR*0.7);ctx.stroke();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.globalAlpha=0.4;
+  ctx.beginPath();ctx.moveTo(hCx+hR*0.62,hCy+hR*1.3);ctx.quadraticCurveTo(hCx+hR*1.6,hCy+hR*1.55,hCx+hR*1.3,hCy+hR*0.7);ctx.stroke();
+  ctx.globalAlpha=1;ctx.lineCap='round';
+
+  // ── DESK (drawn over cat lower body) ──
+  const dskCx=cx+W*0.02,dskW=W*0.52,dskPx=dskW*0.08,dskPy=H*0.048,dskF=H*0.055;
+  ctx.fillStyle='#FFF5D8';
+  ctx.beginPath();ctx.moveTo(dskCx-dskW/2,deskTopY);ctx.lineTo(dskCx-dskW/2+dskPx,deskTopY-dskPy);ctx.lineTo(dskCx+dskW/2+dskPx,deskTopY-dskPy);ctx.lineTo(dskCx+dskW/2,deskTopY);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#F5E8C0';
+  ctx.beginPath();ctx.moveTo(dskCx-dskW/2,deskTopY);ctx.lineTo(dskCx+dskW/2,deskTopY);ctx.lineTo(dskCx+dskW/2,deskTopY+dskF);ctx.lineTo(dskCx-dskW/2,deskTopY+dskF);ctx.closePath();ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  // Legs
+  const legY=deskTopY+dskF,legH=H*0.13,legW=7;
+  [[dskCx-dskW/2+14,legY],[dskCx+dskW/2-14,legY]].forEach(([lx,ly])=>{
+    ctx.fillStyle='#F0E0A8';ctx.beginPath();ctx.roundRect(lx-legW/2,ly,legW,legH,2);ctx.fill();
+    ctx.strokeStyle=OL;ctx.lineWidth=1.8;ctx.stroke();
+  });
+
+  // ── MONITOR ──
+  const monCx=hCx-W*0.035,monY=deskTopY-dskPy-H*0.23,monW=W*0.115,monH=H*0.2;
+  ctx.fillStyle='#F8F4F0';ctx.beginPath();ctx.roundRect(monCx-monW/2,monY,monW,monH,5);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#DCF0F8';ctx.beginPath();ctx.roundRect(monCx-monW/2+4,monY+4,monW-8,monH-14,3);ctx.fill();
+  ctx.strokeStyle='#B0D0E0';ctx.lineWidth=1.5;
+  [0,1,2,3,4].forEach(i=>{const lw2=i%3===0?monW-16:monW-22;ctx.beginPath();ctx.moveTo(monCx-monW/2+8,monY+10+i*(monH-22)/4);ctx.lineTo(monCx-monW/2+8+lw2,monY+10+i*(monH-22)/4);ctx.stroke();});
+  ctx.fillStyle='#E8E0D8';ctx.strokeStyle=OL;ctx.lineWidth=2;
+  ctx.beginPath();ctx.roundRect(monCx-6,monY+monH,12,H*0.052,2);ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.roundRect(monCx-15,monY+monH+H*0.05,30,6,3);ctx.fill();ctx.stroke();
+
+  // Keyboard
+  ctx.fillStyle='#F0ECE8';ctx.beginPath();ctx.roundRect(monCx-W*0.055,deskTopY-dskPy-5,W*0.11,H*0.038,3);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+  ctx.fillStyle='#D8D0C8';
+  for(let ki=0;ki<3;ki++)for(let kj=0;kj<7;kj++){ctx.beginPath();ctx.roundRect(monCx-W*0.05+kj*W*0.014,deskTopY-dskPy-2+ki*H*0.01,W*0.011,H*0.006,1);ctx.fill();}
+
+  // Mug
+  const mgx=hCx+W*0.12,mgy=deskTopY-dskPy-H*0.088,mgW=W*0.034,mgH=H*0.072;
+  ctx.fillStyle='#FFFFFF';ctx.beginPath();ctx.roundRect(mgx-mgW/2,mgy-mgH,mgW,mgH,3);ctx.fill();
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.stroke();
+  ctx.fillStyle='#C87850';ctx.fillRect(mgx-mgW/2+2,mgy-mgH+3,mgW-4,mgH*0.52);
+  ctx.strokeStyle=OL;ctx.lineWidth=2;ctx.beginPath();ctx.arc(mgx+mgW/2+4,mgy-mgH*0.45,mgH*0.22,-0.65,0.65);ctx.stroke();
+  ctx.strokeStyle='#E0C0B0';ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(mgx-3,mgy-mgH-4);ctx.quadraticCurveTo(mgx-6,mgy-mgH-10,mgx-3,mgy-mgH-17);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(mgx+3,mgy-mgH-4);ctx.quadraticCurveTo(mgx+6,mgy-mgH-10,mgx+3,mgy-mgH-17);ctx.stroke();
+
+  // Sticky note
+  ctx.fillStyle=S.deco.includes('wb')?'#FFFAB0':'#FFFDE0';ctx.strokeStyle=OL;ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.roundRect(hCx+W*0.15,deskTopY-dskPy-H*0.04,W*0.058,H*0.032,2);ctx.fill();ctx.stroke();
+  ctx.strokeStyle='#E0D890';ctx.lineWidth=1;
+  [0,1].forEach(i=>{ctx.beginPath();ctx.moveTo(hCx+W*0.153,deskTopY-dskPy-H*0.025+i*H*0.01);ctx.lineTo(hCx+W*0.2,deskTopY-dskPy-H*0.025+i*H*0.01);ctx.stroke();});
+
+  // Award plaque (if owned)
+  if(S.deco.includes('award')){
+    const ax=dskCx-dskW/2+30,ay=deskTopY-dskPy-H*0.1;
+    ctx.fillStyle='#F5C842';ctx.beginPath();ctx.roundRect(ax,ay,28,22,3);ctx.fill();
+    ctx.strokeStyle=OL;ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle='#5A3A08';ctx.font='bold 7px sans-serif';ctx.textAlign='center';ctx.fillText('★',ax+14,ay+15);
+    ctx.textAlign='left';
+  }
+
+  ctx.restore();
+}
+
+function init(){
+  // clear old saves from previous versions
+  if(load()&&S.started){go('home');}
+  else{initCreate();go('create');}
+}
+init();
+</script>
+</body>
+</html>
